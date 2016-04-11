@@ -1,0 +1,742 @@
+swagger: "2.0"
+
+################################################################################
+#                              API Information                                 #
+################################################################################
+info:
+  version: 1.0.0
+  title: 乡味接口文档（用户端）
+  description: |
+    ## 接口通信约定
+
+    ### 请求格式
+    请求格式如下
+
+    ```
+    https://api.xiangwei.com/xxx/xxx.do?json={key:value, ...}
+    ```
+    ### 响应格式
+    返回数据格式均为json数据格式, 格式如下：
+    ```
+    {
+        "code":0,
+        "message":"...",
+        "data": {
+            ...
+        },
+        "pagination": {
+            "totalCount": 100,
+            "totalPages": 10,
+            "pageNumber": 1,
+            "pageSize": 10
+        }
+    }
+    ```
+    #### code
+    200-表示请求成功；
+    其他-表示请求失败。
+    #### message
+    错误消息
+    #### data
+    data可能是字符串、字典、数组等等。根据请求不同而有所差异。
+    #### page
+    分页信息，只对分页请求有效。
+
+################################################################################
+#                  Host, Base Path, Schemes and Content Types                  #
+################################################################################
+host: api.xiangwei.com
+basePath: /m/v1
+schemes:
+  - http
+  - https
+produces:
+  - application/json
+consumes:
+  - application/json
+
+################################################################################
+#                                           Paths                              #
+################################################################################
+paths:
+
+################################################################################
+#                                 授权相关                                  #
+################################################################################
+  /auth/signin:
+    post:
+      tags:
+        - 授权
+      description: 登陆
+      parameters:
+        - name: mobile
+          in: query
+          description: 手机号
+          required: true
+          type: string
+        - name: signinType
+          in: query
+          description: 登陆类型 0、手机号密码登陆  1、手机号验证码登陆
+          required: true
+          type: string
+        - name: pwd
+          in: query
+          description: 密码 signinType=0时有效
+          required: false
+          type: string
+        - name: smsCode
+          in: query
+          description: 验证码 signinType=1时有效
+          required: false
+          type: string
+        - name: deviceType
+          in: query
+          description: 设备类型 1、Android，2、iOS
+          required: false
+          type: string
+        - name: baiduUserId
+          in: query
+          description: 百度推送用
+          required: false
+          type: string
+        - name: channelId
+          in: query
+          description: 百度channelId，百度推送用
+          required: false
+          type: string
+
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: '#/definitions/User'
+
+  /auth/sendVCode:
+    post:
+      tags:
+        - 授权
+      description: 发送验证码
+      parameters:
+        - name: mobile
+          in: query
+          description: 手机号
+          required: true
+          type: string
+        - name: type
+          in: query
+          description: 验证码类型 1、登陆 2、找回支付密码
+          required: true
+          type: string
+
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: object
+            properties:
+              data:
+                type: boolean
+
+  /auth/signout:
+    post:
+      tags:
+        - 授权
+      description: 退出登陆
+      parameters:
+        - name: userId
+          in: query
+          description: 用户标识
+          required: true
+          type: string
+
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: object
+            properties:
+              data:
+                type: boolean
+
+  /auth/supplementInfo:
+    post:
+      tags:
+        - 授权
+      description: 补充登陆信息（推送需要）
+      parameters:
+        - name: userId
+          in: query
+          description: 用户标识
+          required: true
+          type: string
+        - name: baiduUserId
+          in: query
+          description: 百度推送用
+          required: true
+          type: string
+        - name: channelId
+          in: query
+          description: 百度channelId，百度推送用
+          required: true
+          type: string
+
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: object
+            properties:
+              data:
+                type: boolean
+
+################################################################################
+#                                 发现                                         #
+################################################################################
+  /discover:
+    post:
+      tags:
+        - 发现
+      description: 发现列表（分页）
+      parameters:
+        - name: city
+          in: query
+          description: 城市
+          required: true
+          type: string
+        - name: pageSize
+          in: query
+          description: 每页条数
+          required: true
+          type: string
+        - name: pageNumber
+          in: query
+          description: 页数
+          required: true
+          type: string
+
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: object
+            properties:
+              pagination:
+                $ref: '#/definitions/Pagination'
+              data:
+                type: object
+                properties:
+                  adList:
+                    type: array
+                    items:
+                      type: string
+                  tagList:
+                    type: array
+                    items:
+                      type: string
+                  productList:
+                    type: array
+                    items:
+                      $ref: '#/definitions/TourismProduct'
+
+################################################################################
+#                                 乡村                                         #
+################################################################################
+  /village/list:
+    post:
+      tags:
+        - 乡村
+      description: 特色乡村列表（分页）
+      parameters:
+        - name: city
+          in: query
+          description: 城市
+          required: true
+          type: string
+        - name: pageSize
+          in: query
+          description: 每页条数
+          required: true
+          type: string
+        - name: pageNumber
+          in: query
+          description: 页数
+          required: true
+          type: string
+
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: object
+            properties:
+              pagination:
+                $ref: '#/definitions/Pagination'
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/Village'
+
+  /village/shopList:
+    post:
+      tags:
+        - 乡村
+      description: 乡村商家列表
+      parameters:
+        - name: villageId
+          in: query
+          description: 乡村标识
+          required: true
+          type: string
+
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: object
+            properties:
+              pagination:
+                $ref: '#/definitions/Pagination'
+              data:
+                type: object
+                properties:
+                  village:
+                    $ref: '#/definitions/Village'
+                  shopList:
+                    type: array
+                    items:
+                      $ref: '#/definitions/Shop'
+
+################################################################################
+#                                 旅游产品                                     #
+################################################################################
+  /tourismProduct/list:
+    post:
+      tags:
+        - 旅游产品
+      description: 产品列表（分页）
+      parameters:
+        - name: city
+          in: query
+          description: 城市 (有值时：按该城市筛选)
+          required: false
+          type: string
+        - name: tag
+          in: query
+          description: 主题 (有值时根据主题过滤)
+          required: false
+          type: string
+        - name: shopType
+          in: query
+          description: 店铺类型 (0、所有1、农家 2、旅游公司 3、导游)
+          required: false
+          type: integer
+        - name: pageSize
+          in: query
+          description: 每页条数
+          required: true
+          type: string
+        - name: pageNumber
+          in: query
+          description: 页数
+          required: true
+          type: string
+
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: object
+            properties:
+              pagination:
+                $ref: '#/definitions/Pagination'
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/TourismProduct'
+
+  /tourismProduct/info:
+    post:
+      tags:
+        - 旅游产品
+      description: 产品详细
+      parameters:
+        - name: productId
+          in: query
+          description: 产品标识
+          required: true
+          type: string
+        - name: userId
+          in: query
+          description: 用户标识
+          required: true
+          type: string
+
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: '#/definitions/TourismProduct'
+
+  /tourismProduct/waitCommentList:
+    post:
+      tags:
+        - 旅游产品
+      description: 待评价产品列表（分页）
+      parameters:
+        - name: userId
+          in: query
+          description: 用户标识
+          required: true
+          type: string
+        - name: pageSize
+          in: query
+          description: 每页条数
+          required: true
+          type: string
+        - name: pageNumber
+          in: query
+          description: 页数
+          required: true
+          type: string
+
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: object
+            properties:
+              pagination:
+                $ref: '#/definitions/Pagination'
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/TourismProduct'
+
+################################################################################
+#                                 城市                                         #
+################################################################################
+  /city/openList:
+    post:
+      tags:
+        - 城市
+      description: 已开通城市列表
+
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  type: string
+
+################################################################################
+#                                 Definitions                                  #
+################################################################################
+definitions:
+  Pagination:
+    type: object
+    description: 分页
+    properties:
+      totalCount:
+        type: integer
+        description: 总条数
+      totalPage:
+        type: integer
+        description: 总页数
+      pageNumber:
+        type: integer
+        description: 当前页数
+      pageSize:
+        type: integer
+        description: 页大小
+
+  User:
+    type: object
+    description: 用户
+    properties:
+      id:
+        type: string
+        description: 用户标识
+      nickname:
+        type: string
+        description: 昵称
+      avataUrl:
+        type: string
+        description: 头像地址
+      mobile:
+        type: string
+        description: 手机号
+      sex:
+        type: integer
+        description: 性别 1、男 2、女
+      signupTime:
+        type: string
+        description: 注册时间
+        format: date
+      ageGroup:
+        type: string
+        description: 年龄段
+      token:
+        type: string
+        description: 登陆返回的token
+
+  TourismProduct:
+    type: object
+    description: 旅游产品
+    properties:
+      id:
+        type: string
+        description: 产品标识
+      shopId:
+        type: string
+        description: 商铺标识
+      name:
+        type: string
+        description: 名称
+      desc:
+        type: string
+        description: 描述
+      tags:
+        type: array
+        description: 标签
+        items:
+          type: string
+      price:
+        type: number
+        description: 市场价格
+      salesPrice:
+        type: number
+        description: 促销价格
+      addr:
+        description: 地址
+        $ref: '#/definitions/VillageAddr'
+      imageUrl:
+        type: string
+        description: 图片地址
+      startDate:
+        type: string
+        description: 开始时间
+        format: date
+      endDate:
+        type: string
+        description: 结束时间
+        format: date
+      imageUrlList:
+        type: array
+        description: 产品图片(多张)
+        items:
+          type: string
+      collectFlag:
+        type: string
+        description: 收藏标记 0、未收藏 1、已收藏
+      collectCount:
+        type: integer
+        description: 收藏次数
+      detailUrl:
+        type: string
+        description: 详情页url
+      needBook:
+        type: boolean
+        description: 是否需要预定
+      preBookTime:
+        type: string
+        description: 预定提前时间
+      nonChange:
+        type: boolean
+        description: true:不可改 false:可改
+      nonRefundable:
+        type: boolean
+        description: true:不可退 false:可退
+      recommentSlogan:
+        type: string
+        description: 推荐宣传语
+      recommentDeadline:
+        type: string
+        description:  推荐截止日期
+        format: date
+      recommentIndex:
+        type: integer
+        description: 推荐排序
+
+  ShopCertification:
+    type: object
+    description: 店铺认证
+    properties:
+      shopId:
+        type: string
+        description: 店铺标识
+      realName:
+        type: string
+        description: 店主名
+      IDNo:
+        type: string
+        description: 店主身份证号
+      legalPerson:
+        type: string
+        description: 法人代表
+      licenseNo:
+        type: string
+        description: 许可证编号
+      licenseImageUrl:
+        type: string
+        description: 执照照片地址
+
+  Shop:
+    type: object
+    description: 店铺
+    properties:
+      id:
+        type: string
+        description: 店铺标识
+      name:
+        type: string
+        description: 店铺名
+      desc:
+        type: string
+        description: 店铺描述
+      type:
+        type: string
+        description: 店铺类型
+      typeVerification:
+        type: integer
+        description: 店铺类型认证 0、未认证 1、认证
+      serviceTime:
+        type: string
+        description: 服务时间
+      addr:
+        description: 地址
+        $ref: '#/definitions/VillageAddr'
+      score:
+        type: number
+        description: 评分
+      tel:
+        type: string
+        description: 联系电话
+      mobile:
+        type: string
+        description: 联系手机号
+      qq:
+        type: string
+        description: QQ
+      weixin:
+        type: string
+        description: 微信
+      avatarUrl:
+        type: string
+        description: 店铺头像
+      imageUrlList:
+        type: array
+        description: 图片列表
+        items:
+          type: string
+      shopCertification:
+        description: 店铺认证
+        $ref: '#/definitions/ShopCertification'
+      tourismList:
+        type: array
+        description: 店铺产品列表
+        items:
+          $ref: '#/definitions/TourismProduct'
+
+  Village:
+    type: object
+    description: 乡村
+    properties:
+      id:
+        type: string
+        description: 乡村标识
+      name:
+        type: string
+        description: 乡村名
+      desc:
+        type: string
+        description: 乡村介绍
+      slogan:
+        type: string
+        description: 宣传语
+      tags:
+        type: array
+        description: 特色标签
+        items:
+          type: string
+      addr:
+        description: 地址
+        $ref: '#/definitions/VillageAddr'
+      imageUrlList:
+        type: array
+        description: 乡村图片列表
+        items:
+          type: string
+      shopCount:
+        type: string
+        description: 店铺数量
+
+  Comment:
+    type: object
+    description: 评论
+    properties:
+      id:
+        type: string
+        description: 评论标识
+      userId:
+        type: string
+        description: 评论者标识
+      shopId:
+        type: string
+        description: 店铺标识
+      nickname:
+        type: string
+        description: 评论者昵称
+      avataUrl:
+        type: string
+        description: 评论者头像地址
+      mobile:
+        type: string
+        description: 评论者手机号
+      content:
+        type: string
+        description: 内容
+      score:
+        type: integer
+        description: 评分
+      time:
+        type: string
+        description: 评论时间
+        format: date
+      imageUrlList:
+        type: array
+        description: 评论图片
+        items:
+          type: string
+
+  VillageAddr:
+    type: object
+    description: 乡村地址
+    properties:
+      id:
+        type: string
+        description: 标识
+      province:
+        type: string
+        description: 地点-省
+      city:
+        type: string
+        description: 地点-市
+      area:
+        type: string
+        description: 地点-区
+      town:
+        type: string
+        description: 地点-乡/镇
+      village:
+        type: string
+        description: 地点-村

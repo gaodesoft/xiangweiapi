@@ -1,0 +1,1632 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "乡味接口文档（商户端）",
+        "description": "## 接口通信约定\n\n### 请求格式\n请求格式如下\n\n```\nhttps://api.xiangwei.com/xxx/xxx.do?json={key:value, ...}\n```\n### 响应格式\n返回数据格式均为json数据格式, 格式如下：\n```\n{\n    \"code\":0,\n    \"message\":\"...\",\n    \"data\": {\n        ...\n    },\n    \"pagination\": {\n        \"totalCount\": 100,\n        \"totalPages\": 10,\n        \"pageNumber\": 1,\n        \"pageSize\": 10\n    }\n}\n```\n#### code\n200-表示请求成功；\n其他-表示请求失败。\n#### message\n错误消息\n#### data\ndata可能是字符串、字典、数组等等。根据请求不同而有所差异。\n#### page\n分页信息，只对分页请求有效。\n"
+    },
+    "host": "api.xiangwei.com",
+    "basePath": "/sj/v1",
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "tags": [
+        {
+            "name": "授权",
+            "description": "注册、登陆、获取验证码等等。"
+        },
+        {
+            "name": "商户",
+            "description": "商户信息维护及查询。"
+        },
+        {
+            "name": "旅游产品",
+            "description": "旅游产品信息维护及查询。"
+        },
+        {
+            "name": "城市",
+            "description": "开通城市、开通乡村等等。"
+        }
+    ],
+    "paths": {
+        "/auth/signup": {
+            "post": {
+                "tags": [
+                    "授权"
+                ],
+                "description": "注册",
+                "parameters": [
+                    {
+                        "name": "mobile",
+                        "in": "query",
+                        "description": "手机号",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "pwd",
+                        "in": "query",
+                        "description": "密码",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "smsCode",
+                        "in": "query",
+                        "description": "验证码",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "shopType",
+                        "in": "query",
+                        "description": "店铺类型 1、农户，2、个人导游 3、旅行社",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "addr",
+                        "in": "body",
+                        "description": "地点",
+                        "required": false,
+                        "schema": {
+                            "$ref": "#/definitions/VillageAddr"
+                        }
+                    },
+                    {
+                        "name": "deviceType",
+                        "in": "query",
+                        "description": "设备类型 1、Android，2、iOS",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "baiduUserId",
+                        "in": "query",
+                        "description": "百度推送用",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "channelId",
+                        "in": "query",
+                        "description": "百度channelId，百度推送用",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "$ref": "#/definitions/User"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/signin": {
+            "post": {
+                "tags": [
+                    "授权"
+                ],
+                "description": "登陆",
+                "parameters": [
+                    {
+                        "name": "mobile",
+                        "in": "query",
+                        "description": "手机号",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "pwd",
+                        "in": "query",
+                        "description": "密码",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "deviceType",
+                        "in": "query",
+                        "description": "设备类型 1、Android，2、iOS",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "baiduUserId",
+                        "in": "query",
+                        "description": "百度推送用",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "channelId",
+                        "in": "query",
+                        "description": "百度channelId，百度推送用",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "$ref": "#/definitions/User"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/sendVCode": {
+            "post": {
+                "tags": [
+                    "授权"
+                ],
+                "description": "发送验证码",
+                "parameters": [
+                    {
+                        "name": "mobile",
+                        "in": "query",
+                        "description": "手机号",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "type",
+                        "in": "query",
+                        "description": "验证码类型 1、注册 2、找回登陆密码",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "boolean"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/signout": {
+            "post": {
+                "tags": [
+                    "授权"
+                ],
+                "description": "退出登陆",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "boolean"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/supplementInfo": {
+            "post": {
+                "tags": [
+                    "授权"
+                ],
+                "description": "补充登陆信息（推送需要）",
+                "parameters": [
+                    {
+                        "name": "baiduUserId",
+                        "in": "query",
+                        "description": "百度推送用",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "channelId",
+                        "in": "query",
+                        "description": "百度channelId，百度推送用",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "boolean"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user/pwdSetting": {
+            "post": {
+                "tags": [
+                    "商户"
+                ],
+                "description": "密码设置",
+                "parameters": [
+                    {
+                        "name": "mobile",
+                        "in": "query",
+                        "description": "手机号",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "pwd",
+                        "in": "query",
+                        "description": "密码",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "smsCode",
+                        "in": "query",
+                        "description": "验证码",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "boolean"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user/realnameCertificate": {
+            "post": {
+                "tags": [
+                    "商户"
+                ],
+                "description": "实名认证",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "parameters": [
+                    {
+                        "name": "realname",
+                        "in": "query",
+                        "description": "真实姓名",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "IDNo",
+                        "in": "query",
+                        "description": "身份证号",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "file",
+                        "in": "formData",
+                        "description": "身份证图片",
+                        "required": true,
+                        "type": "file"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "boolean",
+                                    "description": "是否成功"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user/individualCertificate": {
+            "post": {
+                "tags": [
+                    "商户"
+                ],
+                "description": "个体户认证",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "parameters": [
+                    {
+                        "name": "licenseImage",
+                        "in": "formData",
+                        "description": "营业执照照片",
+                        "required": true,
+                        "type": "file"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "boolean",
+                                    "description": "是否成功"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user/companyCertificate": {
+            "post": {
+                "tags": [
+                    "商户"
+                ],
+                "description": "企业认证",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "企业名称",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "legalPerson",
+                        "in": "query",
+                        "description": "企业法人",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "licenseImage",
+                        "in": "formData",
+                        "description": "营业执照照片",
+                        "required": true,
+                        "type": "file"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "boolean",
+                                    "description": "是否成功"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user/contactSetting": {
+            "post": {
+                "tags": [
+                    "商户"
+                ],
+                "description": "联系方式设置",
+                "parameters": [
+                    {
+                        "name": "tel",
+                        "in": "query",
+                        "description": "联系电话，值不为null时才会修改",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "qq",
+                        "in": "query",
+                        "description": "qq号，值不为null时才会修改",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "weixin",
+                        "in": "query",
+                        "description": "微信号，值不为null时才会修改",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "boolean",
+                                    "description": "是否成功"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user/avatarUpload": {
+            "post": {
+                "tags": [
+                    "商户"
+                ],
+                "description": "店铺头像上传",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "parameters": [
+                    {
+                        "name": "file",
+                        "in": "formData",
+                        "description": "店铺头像数据",
+                        "required": true,
+                        "type": "file"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "boolean",
+                                    "description": "是否成功"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user/imageUpload": {
+            "post": {
+                "tags": [
+                    "商户"
+                ],
+                "description": "店铺图片上传",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "parameters": [
+                    {
+                        "name": "file",
+                        "in": "formData",
+                        "description": "图片数据",
+                        "required": true,
+                        "type": "file"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "string",
+                                    "description": "图片标识"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user/imageDelete": {
+            "post": {
+                "tags": [
+                    "商户"
+                ],
+                "description": "店铺图片删除",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "parameters": [
+                    {
+                        "name": "imageId",
+                        "in": "query",
+                        "description": "图片标识",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "boolean",
+                                    "description": "是否成功"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user/baseSetting": {
+            "post": {
+                "tags": [
+                    "商户"
+                ],
+                "description": "商铺基本信息设置， 店铺名、店铺描述、店铺地址、客服时间等设置",
+                "parameters": [
+                    {
+                        "name": "shopName",
+                        "in": "query",
+                        "description": "名称，值不为null时才会修改",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "desc",
+                        "in": "query",
+                        "description": "描述，值不为null时才会修改",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "addr",
+                        "in": "body",
+                        "description": "地点，值不为null时才会修改",
+                        "required": false,
+                        "schema": {
+                            "$ref": "#/definitions/VillageAddr"
+                        }
+                    },
+                    {
+                        "name": "serviceTime",
+                        "in": "query",
+                        "description": "服务时间， e.g. 全天、周一至周五、早9:00至晚21：00等等，值不为null时才会修改",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "boolean",
+                                    "description": "是否成功"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tourismProduct/list": {
+            "post": {
+                "tags": [
+                    "旅游产品"
+                ],
+                "description": "产品列表（分页）",
+                "parameters": [
+                    {
+                        "name": "pageSize",
+                        "in": "query",
+                        "description": "每页条数",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "pageNumber",
+                        "in": "query",
+                        "description": "页数",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "pagination": {
+                                    "$ref": "#/definitions/Pagination"
+                                },
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/TourismProduct"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tourismProduct/info": {
+            "post": {
+                "tags": [
+                    "旅游产品"
+                ],
+                "description": "产品详细",
+                "parameters": [
+                    {
+                        "name": "productId",
+                        "in": "query",
+                        "description": "产品标识",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "$ref": "#/definitions/TourismProduct"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tourismProduct/baseSave": {
+            "post": {
+                "tags": [
+                    "旅游产品"
+                ],
+                "description": "产品基本信息保存",
+                "parameters": [
+                    {
+                        "name": "productId",
+                        "in": "query",
+                        "description": "产品标识， 为空时则为新建产品",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "产品名",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "desc",
+                        "in": "query",
+                        "description": "产品描述",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "tags",
+                        "in": "query",
+                        "description": "产品标签，多个",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "price",
+                        "in": "query",
+                        "description": "价格",
+                        "required": true,
+                        "type": "number"
+                    },
+                    {
+                        "name": "salsPrice",
+                        "in": "query",
+                        "description": "促销价格",
+                        "required": true,
+                        "type": "number"
+                    },
+                    {
+                        "name": "autoConfirm",
+                        "in": "query",
+                        "description": "是否自动确认",
+                        "required": false,
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "needBook",
+                        "in": "query",
+                        "description": "是否需要预定",
+                        "required": false,
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "preBookTime",
+                        "in": "query",
+                        "description": "预定提前时间",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "nonRefundable",
+                        "in": "query",
+                        "description": "true:不可退 false:可退",
+                        "required": false,
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "nonChange",
+                        "in": "query",
+                        "description": "true:不可改 false:可改",
+                        "required": false,
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "startDate",
+                        "in": "query",
+                        "description": "产品有效时间-开始时间",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "endDate",
+                        "in": "query",
+                        "description": "产品有效时间-结束时间",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "addr",
+                        "in": "body",
+                        "description": "地点",
+                        "required": false,
+                        "schema": {
+                            "$ref": "#/definitions/VillageAddr"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "string",
+                                    "description": "产品标识"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tourismProduct/imgeUpload": {
+            "post": {
+                "tags": [
+                    "旅游产品"
+                ],
+                "description": "产品图片上传（单张保存）",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "parameters": [
+                    {
+                        "name": "file",
+                        "in": "formData",
+                        "description": "图片文件",
+                        "required": true,
+                        "type": "file"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "string",
+                                    "description": "标识"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tourismProduct/imgeDelete": {
+            "post": {
+                "tags": [
+                    "旅游产品"
+                ],
+                "description": "产品图片删除",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "parameters": [
+                    {
+                        "name": "imageId",
+                        "in": "query",
+                        "description": "图片标识",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "boolean",
+                                    "description": "是否成功"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tourismProduct/imgeTextSave": {
+            "post": {
+                "tags": [
+                    "旅游产品"
+                ],
+                "description": "图文说明信息保存（单张保存）",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "parameters": [
+                    {
+                        "name": "productId",
+                        "in": "query",
+                        "description": "产品标识",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "text",
+                        "in": "query",
+                        "description": "图片说明",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "file",
+                        "in": "formData",
+                        "description": "图片文件",
+                        "required": true,
+                        "type": "file"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "string",
+                                    "description": "标识"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tourismProduct/itemsSave": {
+            "post": {
+                "tags": [
+                    "旅游产品"
+                ],
+                "description": "产品事项保存",
+                "parameters": [
+                    {
+                        "name": "productId",
+                        "in": "query",
+                        "description": "产品标识",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "schedule",
+                        "in": "query",
+                        "description": "行程",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "point",
+                        "in": "query",
+                        "description": "产品亮点",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "guide",
+                        "in": "query",
+                        "description": "购买须知",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "feeDesc",
+                        "in": "query",
+                        "description": "费用说明",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "otherDesc",
+                        "in": "query",
+                        "description": "其他说明",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "string",
+                                    "description": "标识"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tourismProduct/publish": {
+            "post": {
+                "tags": [
+                    "旅游产品"
+                ],
+                "description": "发布",
+                "parameters": [
+                    {
+                        "name": "productId",
+                        "in": "query",
+                        "description": "产品标识",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "boolean",
+                                    "description": "是否成功"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tourismProduct/soldOut": {
+            "post": {
+                "tags": [
+                    "旅游产品"
+                ],
+                "description": "下架",
+                "parameters": [
+                    {
+                        "name": "productId",
+                        "in": "query",
+                        "description": "产品标识",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "boolean",
+                                    "description": "是否成功"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tourismProduct/recomentApply": {
+            "post": {
+                "tags": [
+                    "旅游产品"
+                ],
+                "description": "申请推荐",
+                "parameters": [
+                    {
+                        "name": "productId",
+                        "in": "query",
+                        "description": "产品标识",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "boolean",
+                                    "description": "是否成功"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tourismProduct/commentList": {
+            "post": {
+                "tags": [
+                    "旅游产品"
+                ],
+                "description": "产品评价列表（分页）",
+                "parameters": [
+                    {
+                        "name": "productId",
+                        "in": "query",
+                        "description": "产品标识",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "pageSize",
+                        "in": "query",
+                        "description": "每页条数",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "pageNumber",
+                        "in": "query",
+                        "description": "页数",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "pagination": {
+                                    "$ref": "#/definitions/Pagination"
+                                },
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/Comment"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/city/openCityList": {
+            "post": {
+                "tags": [
+                    "城市"
+                ],
+                "description": "已开通城市列表",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/city/openVillageList": {
+            "post": {
+                "tags": [
+                    "城市"
+                ],
+                "description": "已开通乡村列表",
+                "parameters": [
+                    {
+                        "name": "city",
+                        "in": "query",
+                        "description": "城市",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/VillageAddr"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "Pagination": {
+            "type": "object",
+            "description": "分页",
+            "properties": {
+                "totalCount": {
+                    "type": "integer",
+                    "description": "总条数"
+                },
+                "totalPage": {
+                    "type": "integer",
+                    "description": "总页数"
+                },
+                "pageNumber": {
+                    "type": "integer",
+                    "description": "当前页数"
+                },
+                "pageSize": {
+                    "type": "integer",
+                    "description": "页大小"
+                }
+            }
+        },
+        "User": {
+            "type": "object",
+            "description": "商户",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "description": "用户标识"
+                },
+                "mobile": {
+                    "type": "string",
+                    "description": "联系手机号"
+                },
+                "signupTime": {
+                    "type": "string",
+                    "description": "注册时间",
+                    "format": "date"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "店铺名"
+                },
+                "desc": {
+                    "type": "string",
+                    "description": "店铺描述"
+                },
+                "type": {
+                    "type": "integer",
+                    "description": "店铺类型 1、农户，2、个人导游 3、旅行社"
+                },
+                "typeVerification": {
+                    "type": "integer",
+                    "description": "店铺类型认证 0、未认证 1、认证"
+                },
+                "status": {
+                    "type": "integer",
+                    "description": "店铺状态， 0、未审核 1、正常 2、被禁用"
+                },
+                "serviceTime": {
+                    "type": "string",
+                    "description": "服务时间"
+                },
+                "addr": {
+                    "$ref": "#/definitions/VillageAddr"
+                },
+                "score": {
+                    "type": "number",
+                    "description": "店铺评分"
+                },
+                "tel": {
+                    "type": "string",
+                    "description": "联系电话"
+                },
+                "qq": {
+                    "type": "string",
+                    "description": "QQ"
+                },
+                "weixin": {
+                    "type": "string",
+                    "description": "微信"
+                },
+                "avatarUrl": {
+                    "type": "string",
+                    "description": "店铺头像"
+                },
+                "imageList": {
+                    "type": "array",
+                    "description": "产品图片列表（id列表，图片url根据文件服务器路径+商户id+图片id用固定的规则组装）",
+                    "items": {
+                        "type": "string",
+                        "description": "图片id"
+                    }
+                },
+                "shopCertification": {
+                    "$ref": "#/definitions/ShopCertification"
+                },
+                "tourismList": {
+                    "type": "array",
+                    "description": "店铺产品列表",
+                    "items": {
+                        "$ref": "#/definitions/TourismProduct"
+                    }
+                }
+            }
+        },
+        "TourismProduct": {
+            "type": "object",
+            "description": "旅游产品",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "description": "产品标识"
+                },
+                "shopId": {
+                    "type": "string",
+                    "description": "商铺标识"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "名称"
+                },
+                "desc": {
+                    "type": "string",
+                    "description": "描述"
+                },
+                "tags": {
+                    "type": "array",
+                    "description": "标签",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "status": {
+                    "type": "integer",
+                    "description": "状态 0、待发布 1、待审核 2、审核通过 3、审核不通过 4、发布 5、下架"
+                },
+                "price": {
+                    "type": "number",
+                    "description": "市场价格"
+                },
+                "salesPrice": {
+                    "type": "number",
+                    "description": "促销价格"
+                },
+                "addr": {
+                    "$ref": "#/definitions/VillageAddr"
+                },
+                "startDate": {
+                    "type": "string",
+                    "description": "开始时间",
+                    "format": "date"
+                },
+                "endDate": {
+                    "type": "string",
+                    "description": "结束时间",
+                    "format": "date"
+                },
+                "imageList": {
+                    "type": "array",
+                    "description": "产品图片列表（id列表，图片url根据文件服务器路径+商户id+产品id+图片id用固定的规则组装）",
+                    "items": {
+                        "type": "string",
+                        "description": "图片id"
+                    }
+                },
+                "collectCount": {
+                    "type": "integer",
+                    "description": "收藏次数"
+                },
+                "detailUrl": {
+                    "type": "string",
+                    "description": "详情页url"
+                },
+                "imageAndTextList": {
+                    "type": "array",
+                    "description": "图文说明",
+                    "items": {
+                        "$ref": "#/definitions/TourismProductImageText"
+                    }
+                },
+                "items": {
+                    "$ref": "#/definitions/TourismProductItems"
+                },
+                "needBook": {
+                    "type": "boolean",
+                    "description": "是否需要预定"
+                },
+                "preBookTime": {
+                    "type": "string",
+                    "description": "预定提前时间"
+                },
+                "nonChange": {
+                    "type": "boolean",
+                    "description": "true:不可改 false:可改"
+                },
+                "nonRefundable": {
+                    "type": "boolean",
+                    "description": "true:不可退 false:可退"
+                },
+                "recomment": {
+                    "$ref": "#/definitions/TourismProductRecomment"
+                }
+            }
+        },
+        "ShopCertification": {
+            "type": "object",
+            "description": "店铺认证",
+            "properties": {
+                "shopId": {
+                    "type": "string",
+                    "description": "店铺标识"
+                },
+                "realName": {
+                    "type": "string",
+                    "description": "店主真实姓名"
+                },
+                "IDNo": {
+                    "type": "string",
+                    "description": "店主身份证号"
+                },
+                "IDImage": {
+                    "type": "string",
+                    "description": "店主身份证图片"
+                },
+                "legalPerson": {
+                    "type": "string",
+                    "description": "法人代表"
+                },
+                "companyName": {
+                    "type": "string",
+                    "description": "企业名称"
+                },
+                "licenseNo": {
+                    "type": "string",
+                    "description": "许可证编号"
+                },
+                "licenseImageUrl": {
+                    "type": "string",
+                    "description": "执照照片地址，个人营业执照、企业营业执照或导游证照片"
+                }
+            }
+        },
+        "TourismProductRecomment": {
+            "type": "object",
+            "description": "旅游产品推荐",
+            "properties": {
+                "productId": {
+                    "type": "string",
+                    "description": "产品标识"
+                },
+                "slogan": {
+                    "type": "string",
+                    "description": "推荐宣传语"
+                },
+                "deadline": {
+                    "type": "string",
+                    "description": "推荐截止日期",
+                    "format": "date"
+                },
+                "index": {
+                    "type": "integer",
+                    "description": "推荐排序"
+                }
+            }
+        },
+        "TourismProductImageText": {
+            "type": "object",
+            "description": "旅游产品图文说明",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "description": "标识"
+                },
+                "imageUrl": {
+                    "type": "string",
+                    "description": "图片地址"
+                },
+                "desc": {
+                    "type": "string",
+                    "description": "图片说明"
+                },
+                "sort": {
+                    "type": "integer",
+                    "description": "排序"
+                }
+            }
+        },
+        "TourismProductItems": {
+            "type": "object",
+            "description": "旅游产品事项",
+            "properties": {
+                "productId": {
+                    "type": "string",
+                    "description": "产品标识"
+                },
+                "schedule": {
+                    "type": "string",
+                    "description": "行程安排"
+                },
+                "point": {
+                    "type": "string",
+                    "description": "产品亮点"
+                },
+                "guide": {
+                    "type": "string",
+                    "description": "购买须知"
+                },
+                "feeDesc": {
+                    "type": "integer",
+                    "description": "费用说明"
+                },
+                "otherDesc": {
+                    "type": "integer",
+                    "description": "其他说明"
+                }
+            }
+        },
+        "VillageAddr": {
+            "type": "object",
+            "description": "乡村地址",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "description": "标识"
+                },
+                "province": {
+                    "type": "string",
+                    "description": "地点-省"
+                },
+                "city": {
+                    "type": "string",
+                    "description": "地点-市"
+                },
+                "area": {
+                    "type": "string",
+                    "description": "地点-区"
+                },
+                "town": {
+                    "type": "string",
+                    "description": "地点-乡/镇"
+                },
+                "village": {
+                    "type": "string",
+                    "description": "地点-村"
+                }
+            }
+        },
+        "Comment": {
+            "type": "object",
+            "description": "评论",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "description": "评论标识"
+                },
+                "userId": {
+                    "type": "string",
+                    "description": "评论者标识"
+                },
+                "shopId": {
+                    "type": "string",
+                    "description": "店铺标识"
+                },
+                "productId": {
+                    "type": "string",
+                    "description": "产品标识"
+                },
+                "nickname": {
+                    "type": "string",
+                    "description": "评论者昵称"
+                },
+                "avataUrl": {
+                    "type": "string",
+                    "description": "评论者头像地址"
+                },
+                "mobile": {
+                    "type": "string",
+                    "description": "评论者手机号"
+                },
+                "content": {
+                    "type": "string",
+                    "description": "内容"
+                },
+                "score": {
+                    "type": "number",
+                    "description": "评分"
+                },
+                "time": {
+                    "type": "string",
+                    "description": "评论时间",
+                    "format": "date"
+                },
+                "imageUrlList": {
+                    "type": "array",
+                    "description": "评论图片",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    }
+}

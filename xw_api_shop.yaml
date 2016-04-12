@@ -59,6 +59,8 @@ consumes:
 #                  tags                                                        #
 ################################################################################
 tags:
+  - name: 文件操作
+    description: 文件相关操作，支持图片、语音、视频等文件类型。
   - name: 授权
     description: 注册、登陆、获取验证码等等。
   - name: 主题
@@ -74,6 +76,38 @@ tags:
 #                                           Paths                              #
 ################################################################################
 paths:
+
+################################################################################
+#                                 文件操作                                     #
+################################################################################
+  /file/upload:
+    post:
+      tags:
+        - 文件操作
+      description: 文件上传
+      consumes:
+        - multipart/form-data
+      parameters:
+        - name: type
+          in: query
+          description: 文件类型 0、图片 1、语音 2、视频 3、其他
+          required: true
+          type: integer
+        - name: file
+          in: formData
+          description: 文件数据
+          required: true
+          type: file
+
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: object
+            properties:
+              data:
+                type: string
+                description: 图片标识
 
 ################################################################################
 #                                 授权相关                                     #
@@ -443,44 +477,20 @@ paths:
                 type: boolean
                 description: 是否成功
 
-  /user/imageUpload:
+  /user/shopImagesSave:
     post:
       tags:
         - 商户
-      description: 店铺图片上传
-      consumes:
-        - multipart/form-data
+      description: 店铺图片保存，该接口依赖文件上传接口，文件上传成功后使用返回的图片标识作为该接口的请求参数
       parameters:
-        - name: file
-          in: formData
-          description: 图片数据
+        - name: imageIds
+          in: body
+          description: 图片标识数组
           required: true
-          type: file
-
-      responses:
-        "200":
-          description: Success
           schema:
-            type: object
-            properties:
-              data:
-                type: string
-                description: 图片标识
-
-  /user/imageDelete:
-    post:
-      tags:
-        - 商户
-      description: 店铺图片删除
-      consumes:
-        - multipart/form-data
-      parameters:
-        - name: imageId
-          in: query
-          description: 图片标识
-          required: true
-          type: string
-
+            type: array
+            items:
+              type: string
       responses:
         "200":
           description: Success
@@ -661,6 +671,7 @@ paths:
           required: false
           schema:
             $ref: '#/definitions/VillageAddr'
+
       responses:
         "200":
           description: Success
@@ -671,42 +682,21 @@ paths:
                 type: string
                 description: 产品标识
 
-  /tourismProduct/imgeUpload:
+  /tourismProduct/imagesSave:
     post:
       tags:
         - 旅游产品
-      description: 产品图片上传（单张保存）
-      consumes:
-        - multipart/form-data
+      description: 产品图片保存，该接口依赖文件上传接口，文件上传成功后使用返回的图片标识作为该接口的请求参数
       parameters:
-        - name: file
-          in: formData
-          description: 图片文件
+        - name: imageIds
+          in: body
+          description: 图片标识数组
           required: true
-          type: file
-      responses:
-        "200":
-          description: Success
           schema:
-            type: object
-            properties:
-              data:
-                type: string
-                description: 标识
+            type: array
+            items:
+              type: string
 
-  /tourismProduct/imgeDelete:
-    post:
-      tags:
-        - 旅游产品
-      description: 产品图片删除
-      consumes:
-        - multipart/form-data
-      parameters:
-        - name: imageId
-          in: query
-          description: 图片标识
-          required: true
-          type: string
       responses:
         "200":
           description: Success
@@ -717,29 +707,35 @@ paths:
                 type: boolean
                 description: 是否成功
 
-  /tourismProduct/imgeTextSave:
+  /tourismProduct/imgeTextDetailSave:
     post:
       tags:
         - 旅游产品
-      description: 图文说明信息保存（单张保存）
-      consumes:
-        - multipart/form-data
+      description: 图文详细信息保存，该接口依赖文件上传接口
       parameters:
         - name: productId
           in: query
           description: 产品标识
           required: true
           type: string
+        - name: detailId
+          in: query
+          description: 图文详细标识， 修改时需要
+          required: false
+          type: string
         - name: text
           in: query
           description: 图片说明
           required: false
           type: string
-        - name: file
-          in: formData
-          description: 图片文件
+        - name: imageIds
+          in: body
+          description: 图片标识数组
           required: true
-          type: file
+          schema:
+            type: array
+            items:
+              type: string
 
       responses:
         "200":
@@ -751,42 +747,63 @@ paths:
                 type: string
                 description: 标识
 
-  /tourismProduct/itemsSave:
+  /tourismProduct/imgeTextDetailDelete:
     post:
       tags:
         - 旅游产品
-      description: 产品事项保存
+      description: 图文详细信息删除
       parameters:
         - name: productId
           in: query
           description: 产品标识
           required: true
           type: string
-        - name: schedule
+        - name: detailId
           in: query
-          description: 行程
+          description: 图文详细标识
+          required: true
+          type: string
+
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: object
+            properties:
+              data:
+                type: boolean
+                description: 是否成功
+
+  /tourismProduct/itemSave:
+    post:
+      tags:
+        - 旅游产品
+      description: 产品事项保存，该接口依赖文件上传接口
+      parameters:
+        - name: productId
+          in: query
+          description: 产品标识
+          required: true
+          type: string
+        - name: type
+          in: query
+          description: 事项类型 1、行程安排 2、购买提示 3、费用说明 4、其他说明
+          required: true
+          type: string
+        - name: text
+          in: query
+          description: 文字说明
           required: false
           type: string
-        - name: point
-          in: query
-          description: 产品亮点
-          required: false
-          type: string
-        - name: guide
-          in: query
-          description: 购买须知
-          required: false
-          type: string
-        - name: feeDesc
-          in: query
-          description: 费用说明
-          required: false
-          type: string
-        - name: otherDesc
-          in: query
-          description: 其他说明
-          required: false
-          type: string
+        - name: imageIds
+          in: body
+          description: 事项图片
+          required: true
+          schema:
+            type: array
+            items:
+              type: string
+
       responses:
         "200":
           description: Success
@@ -938,7 +955,7 @@ paths:
                   $ref: '#/definitions/VillageAddr'
 
 ################################################################################
-#                                 Definitions                                  #
+#                                 数据模型                                     #
 ################################################################################
 definitions:
   Pagination:
@@ -1063,7 +1080,7 @@ definitions:
         format: date
       imageList:
         type: array
-        description: 产品图片列表（id列表，图片url根据文件服务器路径+商户id+产品id+图片id用固定的规则组装）
+        description: 产品图片列表（id列表，图片url根据文件服务器路径+图片id用固定的规则组装）
         items:
           type: string
           description: 图片id

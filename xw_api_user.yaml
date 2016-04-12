@@ -356,7 +356,7 @@ paths:
           type: string
         - name: shopType
           in: query
-          description: 店铺类型 (0、所有1、农家 2、旅游公司 3、导游)
+          description: 店铺类型 (0、所有 1、农家 2、旅游公司 3、导游)
           required: false
           type: integer
         - name: pageSize
@@ -544,7 +544,7 @@ definitions:
         format: date
       imageList:
         type: array
-        description: 产品图片列表（id列表，图片url根据文件服务器路径+商户id+产品id+图片id用固定的规则组装）
+        description: 产品图片列表（id列表，图片url根据文件服务器路径+图片id用固定的规则组装）
         items:
           type: string
           description: 图片id
@@ -669,7 +669,7 @@ definitions:
         format: date
       imageList:
         type: array
-        description: 产品图片列表（id列表，图片url根据文件服务器路径店铺户id+图片id用固定的规则组装）
+        description: 产品图片列表（id列表，图片url根据文件服务器路径+图片id用固定的规则组装）
         items:
           type: string
           description: 图片id

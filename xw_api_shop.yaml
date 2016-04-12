@@ -944,13 +944,6 @@ definitions:
       id:
         type: string
         description: 用户标识
-      mobile:
-        type: string
-        description: 手机号
-      signupTime:
-        type: string
-        description: 注册时间
-        format: date
       name:
         type: string
         description: 店铺名
@@ -989,6 +982,10 @@ definitions:
       avatarUrl:
         type: string
         description: 店铺头像
+      signupTime:
+        type: string
+        description: 注册时间
+        format: date
       imageList:
         type: array
         description: 产品图片列表（id列表，图片url根据文件服务器路径+商户id+图片id用固定的规则组装）

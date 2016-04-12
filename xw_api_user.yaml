@@ -6,6 +6,10 @@ swagger: "2.0"
 info:
   version: 1.0.0
   title: 乡味接口文档（用户端）
+  contact:
+    name: czm
+    email: chenzm@gaodesoft.com
+    url: http://www.gaodesoft.com
   description: |
     ## 接口通信约定
 

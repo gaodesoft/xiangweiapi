@@ -55,15 +55,18 @@ produces:
 consumes:
   - application/json
 
+################################################################################
+#                  tags                                                        #
+################################################################################
 tags:
   - name: 授权
-    description: 注册、登陆、获取验证码等等
+    description: 注册、登陆、获取验证码等等。
   - name: 商户
-    description: 商户信息维护及查询
+    description: 商户信息维护及查询。
   - name: 旅游产品
-    description: 旅游产品信息维护及查询
+    description: 旅游产品信息维护及查询。
   - name: 城市
-    description: 开通城市、开通乡村等等
+    description: 开通城市、开通乡村等等。
 
 ################################################################################
 #                                           Paths                              #
@@ -71,7 +74,7 @@ tags:
 paths:
 
 ################################################################################
-#                                 授权相关                                  #
+#                                 授权相关                                     #
 ################################################################################
   /auth/signup:
     post:
@@ -315,7 +318,7 @@ paths:
       parameters:
         - name: licenseImage
           in: formData
-          description: 企业执照照片
+          description: 营业执照照片
           required: true
           type: file
 
@@ -349,7 +352,7 @@ paths:
           type: string
         - name: licenseImage
           in: formData
-          description: 企业执照照片
+          description: 营业执照照片
           required: true
           type: file
 
@@ -371,17 +374,17 @@ paths:
       parameters:
         - name: tel
           in: query
-          description: 联系电话
+          description: 联系电话，值不为null时才会修改
           required: false
           type: string
         - name: qq
           in: query
-          description: qq号
+          description: qq号，值不为null时才会修改
           required: false
           type: string
         - name: weixin
           in: query
-          description: 微信号
+          description: 微信号，值不为null时才会修改
           required: false
           type: string
 
@@ -429,7 +432,7 @@ paths:
       parameters:
         - name: file
           in: formData
-          description: 图片像数据
+          description: 图片数据
           required: true
           type: file
 
@@ -440,8 +443,8 @@ paths:
             type: object
             properties:
               data:
-                type: boolean
-                description: 是否成功
+                type: string
+                description: 图片标识
 
   /user/imageDelete:
     post:
@@ -475,23 +478,23 @@ paths:
       parameters:
         - name: shopName
           in: query
-          description: 名称
+          description: 名称，值不为null时才会修改
           required: false
           type: string
         - name: desc
           in: query
-          description: 描述
+          description: 描述，值不为null时才会修改
           required: false
           type: string
         - name: addr
           in: body
-          description: 地点
+          description: 地点，值不为null时才会修改
           required: false
           schema:
             $ref: '#/definitions/VillageAddr'
         - name: serviceTime
           in: query
-          description: 服务时间， e.g. 全天、周一至周五、早9:00至晚21：00等等
+          description: 服务时间， e.g. 全天、周一至周五、早9:00至晚21：00等等，值不为null时才会修改
           required: false
           type: string
 
@@ -564,9 +567,9 @@ paths:
     post:
       tags:
         - 旅游产品
-      description: 基本信息保存
+      description: 产品基本信息保存
       parameters:
-        - name: priductId
+        - name: productId
           in: query
           description: 产品标识， 为空时则为新建产品
           required: false
@@ -634,7 +637,7 @@ paths:
         - name: addr
           in: body
           description: 地点
-          required: true
+          required: false
           schema:
             $ref: '#/definitions/VillageAddr'
       responses:
@@ -701,7 +704,7 @@ paths:
       consumes:
         - multipart/form-data
       parameters:
-        - name: priductId
+        - name: productId
           in: query
           description: 产品标识
           required: true
@@ -733,15 +736,10 @@ paths:
         - 旅游产品
       description: 产品事项保存
       parameters:
-        - name: priductId
+        - name: productId
           in: query
           description: 产品标识
           required: true
-          type: string
-        - name: itemsId
-          in: query
-          description: 事项标识，为空时则为新建
-          required: false
           type: string
         - name: schedule
           in: query
@@ -784,7 +782,7 @@ paths:
         - 旅游产品
       description: 发布
       parameters:
-        - name: priductId
+        - name: productId
           in: query
           description: 产品标识
           required: true
@@ -805,7 +803,7 @@ paths:
         - 旅游产品
       description: 下架
       parameters:
-        - name: priductId
+        - name: productId
           in: query
           description: 产品标识
           required: true
@@ -826,7 +824,7 @@ paths:
         - 旅游产品
       description: 申请推荐
       parameters:
-        - name: priductId
+        - name: productId
           in: query
           description: 产品标识
           required: true
@@ -916,7 +914,8 @@ paths:
               data:
                 type: array
                 items:
-                  type: string
+                  $ref: '#/definitions/VillageAddr'
+
 ################################################################################
 #                                 Definitions                                  #
 ################################################################################
@@ -971,11 +970,10 @@ definitions:
         type: string
         description: 服务时间
       addr:
-        description: 地址
         $ref: '#/definitions/VillageAddr'
       score:
         type: number
-        description: 评分
+        description: 店铺评分
       tel:
         type: string
         description: 联系电话
@@ -991,13 +989,13 @@ definitions:
       avatarUrl:
         type: string
         description: 店铺头像
-      imageUrlList:
+      imageList:
         type: array
-        description: 图片列表
+        description: 产品图片列表（id列表，图片url根据文件服务器路径+商户id+图片id用固定的规则组装）
         items:
           type: string
+          description: 图片id
       shopCertification:
-        description: 店铺认证
         $ref: '#/definitions/ShopCertification'
       tourismList:
         type: array
@@ -1026,6 +1024,9 @@ definitions:
         description: 标签
         items:
           type: string
+      status:
+        type: integer
+        description: 状态 0、待发布 1、待审核 2、审核通过 3、审核不通过 4、发布 5、下架
       price:
         type: number
         description: 市场价格
@@ -1033,11 +1034,7 @@ definitions:
         type: number
         description: 促销价格
       addr:
-        description: 地址
         $ref: '#/definitions/VillageAddr'
-      imageUrl:
-        type: string
-        description: 图片地址
       startDate:
         type: string
         description: 开始时间
@@ -1046,17 +1043,25 @@ definitions:
         type: string
         description: 结束时间
         format: date
-      imageUrlList:
+      imageList:
         type: array
-        description: 产品图片(多张)
+        description: 产品图片列表（id列表，图片url根据文件服务器路径+商户id+产品id+图片id用固定的规则组装）
         items:
           type: string
+          description: 图片id
       collectCount:
         type: integer
         description: 收藏次数
       detailUrl:
         type: string
         description: 详情页url
+      imageAndTextList:
+        type: array
+        description: 图文说明
+        items:
+          $ref: '#/definitions/TourismProductImageText'
+      items:
+          $ref: '#/definitions/TourismProductItems'
       needBook:
         type: boolean
         description: 是否需要预定
@@ -1069,16 +1074,8 @@ definitions:
       nonRefundable:
         type: boolean
         description: true:不可退 false:可退
-      recommentSlogan:
-        type: string
-        description: 推荐宣传语
-      recommentDeadline:
-        type: string
-        description:  推荐截止日期
-        format: date
-      recommentIndex:
-        type: integer
-        description: 推荐排序
+      recomment:
+          $ref: '#/definitions/TourismProductRecomment'
 
   ShopCertification:
     type: object
@@ -1089,10 +1086,13 @@ definitions:
         description: 店铺标识
       realName:
         type: string
-        description: 店主名
+        description: 店主真实姓名
       IDNo:
         type: string
         description: 店主身份证号
+      IDImage:
+        type: string
+        description: 店主身份证图片
       legalPerson:
         type: string
         description: 法人代表
@@ -1104,45 +1104,25 @@ definitions:
         description: 许可证编号
       licenseImageUrl:
         type: string
-        description: 执照照片地址
+        description: 执照照片地址，个人营业执照、企业营业执照或导游证照片
 
-  Comment:
+  TourismProductRecomment:
     type: object
-    description: 评论
+    description: 旅游产品推荐
     properties:
-      id:
+      productId:
         type: string
-        description: 评论标识
-      userId:
+        description: 产品标识
+      slogan:
         type: string
-        description: 评论者标识
-      shopId:
+        description: 推荐宣传语
+      deadline:
         type: string
-        description: 店铺标识
-      nickname:
-        type: string
-        description: 评论者昵称
-      avataUrl:
-        type: string
-        description: 评论者头像地址
-      mobile:
-        type: string
-        description: 评论者手机号
-      content:
-        type: string
-        description: 内容
-      score:
-        type: integer
-        description: 评分
-      time:
-        type: string
-        description: 评论时间
+        description: 推荐截止日期
         format: date
-      imageUrlList:
-        type: array
-        description: 评论图片
-        items:
-          type: string
+      index:
+        type: integer
+        description: 推荐排序
 
   TourismProductImageText:
     type: object
@@ -1159,15 +1139,15 @@ definitions:
         description: 图片说明
       sort:
         type: integer
-        description: 排序号
+        description: 排序
 
   TourismProductItems:
     type: object
     description: 旅游产品事项
     properties:
-      id:
+      productId:
         type: string
-        description: 标识
+        description: 产品标识
       schedule:
         type: string
         description: 行程安排
@@ -1206,3 +1186,44 @@ definitions:
       village:
         type: string
         description: 地点-村
+
+  Comment:
+    type: object
+    description: 评论
+    properties:
+      id:
+        type: string
+        description: 评论标识
+      userId:
+        type: string
+        description: 评论者标识
+      shopId:
+        type: string
+        description: 店铺标识
+      productId:
+        type: string
+        description: 产品标识
+      nickname:
+        type: string
+        description: 评论者昵称
+      avataUrl:
+        type: string
+        description: 评论者头像地址
+      mobile:
+        type: string
+        description: 评论者手机号
+      content:
+        type: string
+        description: 内容
+      score:
+        type: number
+        description: 评分
+      time:
+        type: string
+        description: 评论时间
+        format: date
+      imageUrlList:
+        type: array
+        description: 评论图片
+        items:
+          type: string

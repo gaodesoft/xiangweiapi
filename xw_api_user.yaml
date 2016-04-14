@@ -131,6 +131,17 @@ paths:
 
       responses:
         "200":
+          examples:
+            application/json:
+              data:
+                id: "007"
+                nickname: "328525910"
+                avataUrl: "18640925068"
+                mobile: "18640925068"
+                sex: 1
+                signupTime: "2016-04-14T01:20:50.52Z"
+                ageGroup: "80后"
+                token: "0000000001"
           description: Success
           schema:
             type: object
@@ -159,6 +170,9 @@ paths:
 
       responses:
         "200":
+          examples:
+            application/json:
+              data: 1
           description: Success
           schema:
             type: object
@@ -175,6 +189,9 @@ paths:
       description: 退出登陆
       responses:
         "200":
+          examples:
+            application/json:
+              data: 1
           description: Success
           schema:
             type: object
@@ -203,6 +220,9 @@ paths:
 
       responses:
         "200":
+          examples:
+            application/json:
+              data: 1
           description: Success
           schema:
             type: object

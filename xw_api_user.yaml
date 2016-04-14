@@ -49,8 +49,8 @@ info:
 ################################################################################
 #                  Host, Base Path, Schemes and Content Types                  #
 ################################################################################
-host: api.xiangwei.com
-basePath: /m/v1
+host: localhost:10010
+basePath: /
 schemes:
   - http
   - https
@@ -86,7 +86,9 @@ paths:
 #                                 授权相关                                  #
 ################################################################################
   /auth/signin:
+    x-swagger-router-controller: DefaultController
     post:
+      operationId: auth_signin
       tags:
         - 授权
       description: 登陆
@@ -137,7 +139,9 @@ paths:
                 $ref: '#/definitions/User'
 
   /auth/sendVCode:
+    x-swagger-router-controller: DefaultController
     post:
+      operationId: auth_sendVCode
       tags:
         - 授权
       description: 发送验证码
@@ -163,7 +167,9 @@ paths:
                 type: boolean
 
   /auth/signout:
+    x-swagger-router-controller: DefaultController
     post:
+      operationId: auth_signout
       tags:
         - 授权
       description: 退出登陆
@@ -177,7 +183,9 @@ paths:
                 type: boolean
 
   /auth/supplementInfo:
+    x-swagger-router-controller: DefaultController
     post:
+      operationId: auth_supplementInfo
       tags:
         - 授权
       description: 补充登陆信息（推送需要）
@@ -206,7 +214,9 @@ paths:
 #                                 主题                                         #
 ################################################################################
   /tag/list:
+    x-swagger-router-controller: DefaultController
     post:
+      operationId: tag_list
       tags:
         - 主题
       description: 主题列表
@@ -226,7 +236,9 @@ paths:
 #                                 发现                                         #
 ################################################################################
   /discover:
+    x-swagger-router-controller: DefaultController
     post:
+      operationId: discover
       tags:
         - 发现
       description: 发现列表（分页）
@@ -275,7 +287,9 @@ paths:
 #                                 乡村                                         #
 ################################################################################
   /village/list:
+    x-swagger-router-controller: DefaultController
     post:
+      operationId: village_list
       tags:
         - 乡村
       description: 特色乡村列表（分页）
@@ -310,7 +324,9 @@ paths:
                   $ref: '#/definitions/Village'
 
   /village/shopList:
+    x-swagger-router-controller: DefaultController
     post:
+      operationId: village_shopList
       tags:
         - 乡村
       description: 乡村商家列表
@@ -343,7 +359,9 @@ paths:
 #                                 旅游产品                                     #
 ################################################################################
   /tourismProduct/list:
+    x-swagger-router-controller: DefaultController
     post:
+      operationId: tourismProduct_list
       tags:
         - 旅游产品
       description: 产品列表（分页）
@@ -388,7 +406,9 @@ paths:
                   $ref: '#/definitions/TourismProduct'
 
   /tourismProduct/info:
+    x-swagger-router-controller: DefaultController
     post:
+      operationId: fileUpload
       tags:
         - 旅游产品
       description: 产品详细
@@ -409,7 +429,9 @@ paths:
                 $ref: '#/definitions/TourismProduct'
 
   /tourismProduct/waitCommentList:
+    x-swagger-router-controller: DefaultController
     post:
+      operationId: tourismProduct_waitCommentList
       tags:
         - 旅游产品
       description: 待评价产品列表（分页）
@@ -442,7 +464,9 @@ paths:
 #                                 城市                                         #
 ################################################################################
   /city/openList:
+    x-swagger-router-controller: DefaultController
     post:
+      operationId: city_openList
       tags:
         - 城市
       description: 已开通城市列表

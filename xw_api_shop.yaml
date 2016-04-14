@@ -49,8 +49,8 @@ info:
 ################################################################################
 #                  Host, Base Path, Schemes and Content Types                  #
 ################################################################################
-host: api.xiangwei.com
-basePath: /sj/v1
+host: localhost:10010
+basePath: /
 schemes:
   - http
   - https
@@ -85,7 +85,9 @@ paths:
 #                                 文件操作                                     #
 ################################################################################
   /file/upload:
+    x-swagger-router-controller: DefaultController
     post:
+      operationId: fileUpload
       tags:
         - 文件操作
       description: 文件上传
@@ -117,7 +119,9 @@ paths:
 #                                 授权相关                                     #
 ################################################################################
   /auth/signup:
+    x-swagger-router-controller: DefaultController
     post:
+      operationId: authSignup
       tags:
         - 授权
       description: 注册
@@ -174,7 +178,9 @@ paths:
                 $ref: '#/definitions/User'
 
   /auth/signin:
+    x-swagger-router-controller: DefaultController
     post:
+      operationId: authSignin
       tags:
         - 授权
       description: 登陆
@@ -215,7 +221,9 @@ paths:
                 $ref: '#/definitions/User'
 
   /auth/sendVCode:
+    x-swagger-router-controller: DefaultController
     post:
+      operationId: authSendVCode
       tags:
         - 授权
       description: 发送验证码
@@ -241,7 +249,9 @@ paths:
                 type: boolean
 
   /auth/signout:
+    x-swagger-router-controller: DefaultController
     post:
+      operationId: authSignout
       tags:
         - 授权
       description: 退出登陆
@@ -256,7 +266,9 @@ paths:
                 type: boolean
 
   /auth/supplementInfo:
+    x-swagger-router-controller: DefaultController
     post:
+      operationId: authSupplementInfo
       tags:
         - 授权
       description: 补充登陆信息（推送需要）
@@ -285,7 +297,9 @@ paths:
 #                                 主题                                         #
 ################################################################################
   /tag/list:
-    post:
+    x-swagger-router-controller: DefaultController
+    get:
+      operationId: tagList
       tags:
         - 主题
       description: 主题列表
@@ -304,7 +318,9 @@ paths:
 #                                 商户                                         #
 ################################################################################
   /user/pwdSetting:
+    x-swagger-router-controller: DefaultController
     post:
+      operationId: userPwdSetting
       tags:
         - 商户
       description: 密码设置
@@ -335,7 +351,9 @@ paths:
                 type: boolean
 
   /user/realnameCertificate:
+    x-swagger-router-controller: DefaultController
     post:
+      operationId: userRealnameCertificate
       tags:
         - 商户
       description: 实名认证
@@ -368,7 +386,9 @@ paths:
                 description: 是否成功
 
   /user/individualCertificate:
+    x-swagger-router-controller: DefaultController
     post:
+      operationId: userIndividualCertificate
       tags:
         - 商户
       description: 个体户认证
@@ -392,7 +412,9 @@ paths:
                 description: 是否成功
 
   /user/companyCertificate:
+    x-swagger-router-controller: DefaultController
     post:
+      operationId: userCompanyCertificate
       tags:
         - 商户
       description: 企业认证
@@ -426,7 +448,9 @@ paths:
                 description: 是否成功
 
   /user/contactSetting:
+    x-swagger-router-controller: DefaultController
     post:
+      operationId: userContactSetting
       tags:
         - 商户
       description: 联系方式设置
@@ -458,7 +482,9 @@ paths:
                 description: 是否成功
 
   /user/avatarUpload:
+    x-swagger-router-controller: DefaultController
     post:
+      operationId: userAvatarUpload
       tags:
         - 商户
       description: 店铺头像上传
@@ -483,6 +509,7 @@ paths:
 
   /user/shopImagesSave:
     post:
+      operationId: userShopImagesSave
       tags:
         - 商户
       description: 店铺图片保存，该接口依赖文件上传接口，文件上传成功后使用返回的图片标识作为该接口的请求参数
@@ -506,7 +533,9 @@ paths:
                 description: 是否成功
 
   /user/baseSetting:
+    x-swagger-router-controller: DefaultController
     post:
+      operationId: userBaseSetting
       tags:
         - 商户
       description: 商铺基本信息设置， 店铺名、店铺描述、店铺地址、客服时间等设置
@@ -548,7 +577,9 @@ paths:
 #                                 旅游产品                                     #
 ################################################################################
   /tourismProduct/list:
+    x-swagger-router-controller: DefaultController
     post:
+      operationId: tourismList
       tags:
         - 旅游产品
       description: 产品列表（分页）
@@ -578,7 +609,9 @@ paths:
                   $ref: '#/definitions/TourismProduct'
 
   /tourismProduct/info:
+    x-swagger-router-controller: DefaultController
     post:
+      operationId: tourismInfo
       tags:
         - 旅游产品
       description: 产品详细
@@ -599,7 +632,9 @@ paths:
                 $ref: '#/definitions/TourismProduct'
 
   /tourismProduct/baseSave:
+    x-swagger-router-controller: DefaultController
     post:
+      operationId: tourismBaseSave
       tags:
         - 旅游产品
       description: 产品基本信息保存
@@ -687,7 +722,9 @@ paths:
                 description: 产品标识
 
   /tourismProduct/imagesSave:
+    x-swagger-router-controller: DefaultController
     post:
+      operationId: tourismImageSave
       tags:
         - 旅游产品
       description: 产品图片保存，该接口依赖文件上传接口，文件上传成功后使用返回的图片标识作为该接口的请求参数
@@ -711,8 +748,10 @@ paths:
                 type: boolean
                 description: 是否成功
 
-  /tourismProduct/imgeTextDetailSave:
+  /tourismProduct/imageTextDetailSave:
+    x-swagger-router-controller: DefaultController
     post:
+      operationId: tourismImageTextDetailSave
       tags:
         - 旅游产品
       description: 图文详细信息保存，该接口依赖文件上传接口
@@ -751,8 +790,10 @@ paths:
                 type: string
                 description: 标识
 
-  /tourismProduct/imgeTextDetailDelete:
+  /tourismProduct/imageTextDetailDelete:
+    x-swagger-router-controller: DefaultController
     post:
+      operationId: tourismImageTextDetailDelete
       tags:
         - 旅游产品
       description: 图文详细信息删除
@@ -779,7 +820,9 @@ paths:
                 description: 是否成功
 
   /tourismProduct/itemSave:
+    x-swagger-router-controller: DefaultController
     post:
+      operationId: tourismItemSave
       tags:
         - 旅游产品
       description: 产品事项保存，该接口依赖文件上传接口
@@ -819,7 +862,9 @@ paths:
                 description: 标识
 
   /tourismProduct/publish:
+    x-swagger-router-controller: DefaultController
     post:
+      operationId: tourismPublish
       tags:
         - 旅游产品
       description: 发布
@@ -840,7 +885,9 @@ paths:
                 description: 是否成功
 
   /tourismProduct/soldOut:
+    x-swagger-router-controller: DefaultController
     post:
+      operationId: tourismSoldOut
       tags:
         - 旅游产品
       description: 下架
@@ -861,7 +908,9 @@ paths:
                 description: 是否成功
 
   /tourismProduct/recomentApply:
+    x-swagger-router-controller: DefaultController
     post:
+      operationId: tourismRecomentApply
       tags:
         - 旅游产品
       description: 申请推荐
@@ -882,7 +931,9 @@ paths:
                 description: 是否成功
 
   /tourismProduct/commentList:
-    post:
+    x-swagger-router-controller: DefaultController
+    get:
+      operationId: tourismProductCommentList
       tags:
         - 旅游产品
       description: 产品评价列表（分页）
@@ -920,7 +971,9 @@ paths:
 #                                 城市                                         #
 ################################################################################
   /city/openCityList:
-    post:
+    x-swagger-router-controller: DefaultController
+    get:
+      operationId: cityOpenCityListList
       tags:
         - 城市
       description: 已开通城市列表
@@ -936,7 +989,9 @@ paths:
                 items:
                   type: string
   /city/openVillageList:
-    post:
+    x-swagger-router-controller: DefaultController
+    get:
+      operationId: cityOpenVillageList
       tags:
         - 城市
       description: 已开通乡村列表
@@ -969,15 +1024,19 @@ definitions:
       totalCount:
         type: integer
         description: 总条数
+        format: int32
       totalPage:
         type: integer
         description: 总页数
+        format: int32
       pageNumber:
         type: integer
         description: 当前页数
+        format: int32
       pageSize:
         type: integer
         description: 页大小
+        format: int32
 
   User:
     type: object
@@ -995,12 +1054,15 @@ definitions:
       type:
         type: integer
         description: 店铺类型 1、农户，2、个人导游 3、旅行社
+        format: int32
       typeVerification:
         type: integer
         description: 店铺类型认证 0、未认证 1、认证
+        format: int32
       status:
         type: integer
         description: 店铺状态， 0、未审核 1、正常 2、被禁用
+        format: int32
       serviceTime:
         type: string
         description: 服务时间
@@ -1066,6 +1128,7 @@ definitions:
       status:
         type: integer
         description: 状态 0、待发布 1、待审核 2、审核通过 3、审核不通过 4、发布 5、下架
+        format: int32
       price:
         type: number
         description: 市场价格
@@ -1091,6 +1154,7 @@ definitions:
       collectCount:
         type: integer
         description: 收藏次数
+        format: int32
       detailUrl:
         type: string
         description: 详情页url
@@ -1162,6 +1226,7 @@ definitions:
       index:
         type: integer
         description: 推荐排序
+        format: int32
 
   TourismProductImageText:
     type: object
@@ -1179,6 +1244,7 @@ definitions:
       sort:
         type: integer
         description: 排序
+        format: int32
 
   TourismProductItems:
     type: object
@@ -1197,10 +1263,10 @@ definitions:
         type: string
         description: 购买须知
       feeDesc:
-        type: integer
+        type: string
         description: 费用说明
       otherDesc:
-        type: integer
+        type: string
         description: 其他说明
 
   VillageAddr:
@@ -1257,6 +1323,7 @@ definitions:
       score:
         type: number
         description: 评分
+        format: int32
       time:
         type: string
         description: 评论时间

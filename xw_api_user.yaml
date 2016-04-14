@@ -493,15 +493,19 @@ definitions:
       totalCount:
         type: integer
         description: 总条数
+        format: int32
       totalPage:
         type: integer
         description: 总页数
+        format: int32
       pageNumber:
         type: integer
         description: 当前页数
+        format: int32
       pageSize:
         type: integer
         description: 页大小
+        format: int32
 
   User:
     type: object
@@ -557,9 +561,11 @@ definitions:
       price:
         type: number
         description: 市场价格
+        format: float
       salesPrice:
         type: number
         description: 促销价格
+        format: float
       addr:
         $ref: '#/definitions/VillageAddr'
       startDate:
@@ -582,6 +588,7 @@ definitions:
       collectCount:
         type: integer
         description: 收藏次数
+        format: int32
       detailUrl:
         type: string
         description: 详情页url
@@ -646,6 +653,7 @@ definitions:
       index:
         type: integer
         description: 推荐排序
+        format: int32
   Shop:
     type: object
     description: 店铺
@@ -662,12 +670,15 @@ definitions:
       type:
         type: integer
         description: 店铺类型 1、农户，2、个人导游 3、旅行社
+        format: int32
       typeVerification:
         type: integer
         description: 店铺类型认证 0、未认证 1、认证
+        format: int32
       status:
         type: integer
         description: 店铺状态， 0、未审核 1、正常 2、被禁用
+        format: int32
       serviceTime:
         type: string
         description: 服务时间
@@ -676,6 +687,7 @@ definitions:
       score:
         type: number
         description: 店铺评分
+        format: float
       tel:
         type: string
         description: 联系电话
@@ -769,6 +781,7 @@ definitions:
       score:
         type: integer
         description: 评分
+        format: int32
       time:
         type: string
         description: 评论时间

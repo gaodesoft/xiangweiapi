@@ -49,15 +49,18 @@ info:
 ################################################################################
 #                  Host, Base Path, Schemes and Content Types                  #
 ################################################################################
-host: localhost:10010
-basePath: /
+host: 192.168.1.162:10010
+basePath: /m/v1
 schemes:
   - http
   - https
 produces:
   - application/json
+  - application/octet-stream
 consumes:
   - application/json
+  - application/octet-stream
+
 
 
 ################################################################################
@@ -88,7 +91,7 @@ paths:
   /auth/signin:
     x-swagger-router-controller: DefaultController
     post:
-      operationId: auth_signin
+      operationId: authSignin
       tags:
         - 授权
       description: 登陆
@@ -131,8 +134,17 @@ paths:
 
       responses:
         "200":
+          description: Success
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/User'
           examples:
             application/json:
+              code: 200
               data:
                 id: "007"
                 nickname: "328525910"
@@ -142,17 +154,11 @@ paths:
                 signupTime: "2016-04-14T01:20:50.52Z"
                 ageGroup: "80后"
                 token: "0000000001"
-          description: Success
-          schema:
-            type: object
-            properties:
-              data:
-                $ref: '#/definitions/User'
 
   /auth/sendVCode:
     x-swagger-router-controller: DefaultController
     post:
-      operationId: auth_sendVCode
+      operationId: authSendVCode
       tags:
         - 授权
       description: 发送验证码
@@ -174,13 +180,19 @@ paths:
           schema:
             type: object
             properties:
+              code:
+                type: integer
               data:
                 type: boolean
+          examples:
+            application/json:
+              code: 200
+              data: true
 
   /auth/signout:
     x-swagger-router-controller: DefaultController
     post:
-      operationId: auth_signout
+      operationId: authSignout
       tags:
         - 授权
       description: 退出登陆
@@ -190,13 +202,19 @@ paths:
           schema:
             type: object
             properties:
+              code:
+                type: integer
               data:
                 type: boolean
+          examples:
+            application/json:
+              code: 200
+              data: true
 
   /auth/supplementInfo:
     x-swagger-router-controller: DefaultController
     post:
-      operationId: auth_supplementInfo
+      operationId: authSupplementInfo
       tags:
         - 授权
       description: 补充登陆信息（推送需要）
@@ -218,8 +236,14 @@ paths:
           schema:
             type: object
             properties:
+              code:
+                type: integer
               data:
                 type: boolean
+          examples:
+            application/json:
+              code: 200
+              data: true
 
 ################################################################################
 #                                 主题                                         #
@@ -227,14 +251,26 @@ paths:
   /tag/list:
     x-swagger-router-controller: DefaultController
     post:
-      operationId: tag_list
+      operationId: tagList
       tags:
         - 主题
       description: 主题列表
       responses:
         "200":
+          description: Success
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+              data:
+                type: array
+                items:
+                  type: string
+                  description: 主题
           examples:
             application/json:
+              code: 200
               data:
                 - "采摘"
                 - "登山"
@@ -242,16 +278,6 @@ paths:
                 - "古镇"
                 - "亲子"
                 - "体验"
-          description: Success
-          schema:
-            type: object
-            properties:
-              data:
-                type: array
-                items:
-                  type: string
-                  description: 主题
-
 ################################################################################
 #                                 发现                                         #
 ################################################################################
@@ -285,6 +311,8 @@ paths:
           schema:
             type: object
             properties:
+              code:
+                type: integer
               pagination:
                 $ref: '#/definitions/Pagination'
               data:
@@ -302,6 +330,50 @@ paths:
                     type: array
                     items:
                       $ref: '#/definitions/TourismProduct'
+          examples:
+            application/json:
+              code: 200
+              pagination:
+                pageNumber: 1
+                totalPage: 10
+                pageSize: 10
+                totalCount: 100
+              data:
+                adList:
+                  - "http://img1.3lian.com/2015/w7/98/d/22.jpg"
+                  - "http://img1.3lian.com/2015/w7/90/d/5.jpg"
+                tagList:
+                  - "踏青"
+                  - "采摘"
+                  - "登山"
+                  - "观光"
+                  - "古镇"
+                  - "亲子"
+                productList:
+                  - id: "1001"
+                    shopId: "1000"
+                    name: "大连威海蓬莱两晚三天游"
+                    desc: "大连，蓬莱威海超值3日游，含大连到烟台三等B船票"
+                    tags:
+                      - "观光"
+                    price: 10
+                    salesPrice: 10
+                    addr:
+                      province: "辽宁"
+                      city: "大连"
+                      area: "高新区"
+                      town: "敬贤街"
+                      village: "桃花源"
+                    startDate: "2016-04-14T01:20:50.52Z"
+                    endDate: "2016-04-30T01:20:50.52Z"
+                    imageList:
+                      - "http://img1.qunarzz.com/p/tts0/201405/27/6f81adf5f6dd9ef6c8d65eac.jpg_r_390x260x90_654d594b.jpg"
+                      - "httphttp://img1.qunarzz.com/p/tts3/201405/27/5d4ca9511dd89f0cc8d65eac.jpg_r_390x260x90_a2cd848c.jpg"
+                    detailUrl: "httpshttp://qdcq3.package.qunar.com/user/detail.jsp?id=838222527&ttsRouteType=周边游&ad_departure=5aSn6L%2Be&ad_arrive=5ZGo6L655ri4&filterDate=&qssrc=eyJ0cyI6IjE0NjA2OTA0OTcyMDEiLCJzcmMiOiJhbGwuZW52YiIsImFjdCI6ImZpbHRlciJ9&ts=1460690498206_264#route_id=15493072&productId=838222527&vendorid=qb2c_qdcq&DepLastDate=2016-07-14&tf=&searchid=1460690498206_264&arrive=5ZGo6L655ri4&DepDate=2016-04-16&vendor=6Z2S5bKb5Zu96ZmF5peF6KGM56S%2B&djtf=&function=6Lef5Zui5ri4&tm=nzb01_newb&from=&isAds=&departure=5aSn6L%2Be&tp=1460690497837_815"
+                    needBook: true
+                    preBookTime: "一天"
+                    nonChange: true
+                    nonRefundable: true
 
 ################################################################################
 #                                 乡村                                         #
@@ -309,7 +381,7 @@ paths:
   /village/list:
     x-swagger-router-controller: DefaultController
     post:
-      operationId: village_list
+      operationId: villageList
       tags:
         - 乡村
       description: 特色乡村列表（分页）
@@ -336,17 +408,45 @@ paths:
           schema:
             type: object
             properties:
+              code:
+                type: integer
               pagination:
                 $ref: '#/definitions/Pagination'
               data:
                 type: array
                 items:
                   $ref: '#/definitions/Village'
+          examples:
+            application/json:
+              code: 200
+              pagination:
+                pageNumber: 1
+                totalPage: 10
+                pageSize: 10
+                totalCount: 100
+              data:
+                - id: "10"
+                  name: "彩虹小镇"
+                  desc: ""
+                  slogan: ""
+                  tags:
+                    - "观光"
+                    - "古镇"
+                  addr:
+                    province: "辽宁"
+                    city: "大连"
+                    area: "高新区"
+                    town: "敬贤街"
+                    village: "彩虹小镇"
+                  imageList:
+                    - "http://img1.3lian.com/2015/w7/98/d/22.jpg"
+                    - "http://img1.3lian.com/2015/w7/90/d/5.jpg"
+
 
   /village/shopList:
     x-swagger-router-controller: DefaultController
     post:
-      operationId: village_shopList
+      operationId: villageShopList
       tags:
         - 乡村
       description: 乡村商家列表
@@ -363,6 +463,8 @@ paths:
           schema:
             type: object
             properties:
+              code:
+                type: integer
               pagination:
                 $ref: '#/definitions/Pagination'
               data:
@@ -374,6 +476,78 @@ paths:
                     type: array
                     items:
                       $ref: '#/definitions/Shop'
+          examples:
+            application/json:
+              code: 200
+              pagination:
+                pageNumber: 1
+                totalPage: 10
+                pageSize: 10
+                totalCount: 100
+              data:
+                village:
+                  id: "10"
+                  name: "彩虹小镇"
+                  desc: ""
+                  slogan: ""
+                  tags:
+                    - "观光"
+                    - "古镇"
+                  addr:
+                    province: "辽宁"
+                    city: "大连"
+                    area: "高新区"
+                    town: "敬贤街"
+                    village: "彩虹小镇"
+                  imageList:
+                    - "http://img1.3lian.com/2015/w7/98/d/22.jpg"
+                    - "http://img1.3lian.com/2015/w7/90/d/5.jpg"
+                shopList:
+                  - id: "10"
+                    name: "xxxx"
+                    desc: ""
+                    type: 1
+                    typeVerification: 1
+                    status: 1
+                    serviceTime: "8:00-20:00"
+                    addr:
+                      province: "辽宁"
+                      city: "大连"
+                      area: "高新区"
+                      town: "敬贤街"
+                      village: "彩虹小镇"
+                    score: 4.9
+                    tel: "041188888888"
+                    mobile: "18888888888"
+                    avatarUrl: "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3047710011,1274531363&fm=116&gp=0.jpg"
+                    imageList:
+                      - "http://img1.3lian.com/2015/w7/98/d/22.jpg"
+                      - "http://img1.3lian.com/2015/w7/90/d/5.jpg"
+                    tourismList:
+                      - id: "1001"
+                        shopId: "1000"
+                        name: "大连威海蓬莱两晚三天游"
+                        desc: "大连，蓬莱威海超值3日游，含大连到烟台三等B船票"
+                        tags:
+                          - "观光"
+                        price: 10
+                        salesPrice: 10
+                        addr:
+                          province: "辽宁"
+                          city: "大连"
+                          area: "高新区"
+                          town: "敬贤街"
+                          village: "桃花源"
+                        startDate: "2016-04-14T01:20:50.52Z"
+                        endDate: "2016-04-30T01:20:50.52Z"
+                        imageList:
+                          - "http://img1.qunarzz.com/p/tts0/201405/27/6f81adf5f6dd9ef6c8d65eac.jpg_r_390x260x90_654d594b.jpg"
+                          - "httphttp://img1.qunarzz.com/p/tts3/201405/27/5d4ca9511dd89f0cc8d65eac.jpg_r_390x260x90_a2cd848c.jpg"
+                        detailUrl: "httpshttp://qdcq3.package.qunar.com/user/detail.jsp?id=838222527&ttsRouteType=周边游&ad_departure=5aSn6L%2Be&ad_arrive=5ZGo6L655ri4&filterDate=&qssrc=eyJ0cyI6IjE0NjA2OTA0OTcyMDEiLCJzcmMiOiJhbGwuZW52YiIsImFjdCI6ImZpbHRlciJ9&ts=1460690498206_264#route_id=15493072&productId=838222527&vendorid=qb2c_qdcq&DepLastDate=2016-07-14&tf=&searchid=1460690498206_264&arrive=5ZGo6L655ri4&DepDate=2016-04-16&vendor=6Z2S5bKb5Zu96ZmF5peF6KGM56S%2B&djtf=&function=6Lef5Zui5ri4&tm=nzb01_newb&from=&isAds=&departure=5aSn6L%2Be&tp=1460690497837_815"
+                        needBook: true
+                        preBookTime: "一天"
+                        nonChange: true
+                        nonRefundable: true
 
 ################################################################################
 #                                 旅游产品                                     #
@@ -381,7 +555,7 @@ paths:
   /tourismProduct/list:
     x-swagger-router-controller: DefaultController
     post:
-      operationId: tourismProduct_list
+      operationId: tourismProductList
       tags:
         - 旅游产品
       description: 产品列表（分页）
@@ -418,17 +592,52 @@ paths:
           schema:
             type: object
             properties:
+              code:
+                type: integer
               pagination:
                 $ref: '#/definitions/Pagination'
               data:
                 type: array
                 items:
                   $ref: '#/definitions/TourismProduct'
+          examples:
+            application/json:
+              code: 200
+              pagination:
+                pageNumber: 1
+                totalPage: 10
+                pageSize: 10
+                totalCount: 100
+              data:
+                - id: "1001"
+                  shopId: "1000"
+                  name: "大连威海蓬莱两晚三天游"
+                  desc: "大连，蓬莱威海超值3日游，含大连到烟台三等B船票"
+                  tags:
+                    - "观光"
+                  price: 10
+                  salesPrice: 10
+                  addr:
+                    province: "辽宁"
+                    city: "大连"
+                    area: "高新区"
+                    town: "敬贤街"
+                    village: "桃花源"
+                  startDate: "2016-04-14T01:20:50.52Z"
+                  endDate: "2016-04-30T01:20:50.52Z"
+                  imageList:
+                    - "http://img1.qunarzz.com/p/tts0/201405/27/6f81adf5f6dd9ef6c8d65eac.jpg_r_390x260x90_654d594b.jpg"
+                    - "httphttp://img1.qunarzz.com/p/tts3/201405/27/5d4ca9511dd89f0cc8d65eac.jpg_r_390x260x90_a2cd848c.jpg"
+                  detailUrl: "httpshttp://qdcq3.package.qunar.com/user/detail.jsp?id=838222527&ttsRouteType=周边游&ad_departure=5aSn6L%2Be&ad_arrive=5ZGo6L655ri4&filterDate=&qssrc=eyJ0cyI6IjE0NjA2OTA0OTcyMDEiLCJzcmMiOiJhbGwuZW52YiIsImFjdCI6ImZpbHRlciJ9&ts=1460690498206_264#route_id=15493072&productId=838222527&vendorid=qb2c_qdcq&DepLastDate=2016-07-14&tf=&searchid=1460690498206_264&arrive=5ZGo6L655ri4&DepDate=2016-04-16&vendor=6Z2S5bKb5Zu96ZmF5peF6KGM56S%2B&djtf=&function=6Lef5Zui5ri4&tm=nzb01_newb&from=&isAds=&departure=5aSn6L%2Be&tp=1460690497837_815"
+                  needBook: true
+                  preBookTime: "一天"
+                  nonChange: true
+                  nonRefundable: true
 
   /tourismProduct/info:
     x-swagger-router-controller: DefaultController
     post:
-      operationId: fileUpload
+      operationId: tourismProductInfo
       tags:
         - 旅游产品
       description: 产品详细
@@ -445,13 +654,43 @@ paths:
           schema:
             type: object
             properties:
+              code:
+                type: integer
               data:
                 $ref: '#/definitions/TourismProduct'
+          examples:
+            application/json:
+              code: 200
+              data:
+                id: "1001"
+                shopId: "1000"
+                name: "大连威海蓬莱两晚三天游"
+                desc: "大连，蓬莱威海超值3日游，含大连到烟台三等B船票"
+                tags:
+                  - "观光"
+                price: 10
+                salesPrice: 10
+                addr:
+                  province: "辽宁"
+                  city: "大连"
+                  area: "高新区"
+                  town: "敬贤街"
+                  village: "桃花源"
+                startDate: "2016-04-14T01:20:50.52Z"
+                endDate: "2016-04-30T01:20:50.52Z"
+                imageList:
+                  - "http://img1.qunarzz.com/p/tts0/201405/27/6f81adf5f6dd9ef6c8d65eac.jpg_r_390x260x90_654d594b.jpg"
+                  - "httphttp://img1.qunarzz.com/p/tts3/201405/27/5d4ca9511dd89f0cc8d65eac.jpg_r_390x260x90_a2cd848c.jpg"
+                detailUrl: "httpshttp://qdcq3.package.qunar.com/user/detail.jsp?id=838222527&ttsRouteType=周边游&ad_departure=5aSn6L%2Be&ad_arrive=5ZGo6L655ri4&filterDate=&qssrc=eyJ0cyI6IjE0NjA2OTA0OTcyMDEiLCJzcmMiOiJhbGwuZW52YiIsImFjdCI6ImZpbHRlciJ9&ts=1460690498206_264#route_id=15493072&productId=838222527&vendorid=qb2c_qdcq&DepLastDate=2016-07-14&tf=&searchid=1460690498206_264&arrive=5ZGo6L655ri4&DepDate=2016-04-16&vendor=6Z2S5bKb5Zu96ZmF5peF6KGM56S%2B&djtf=&function=6Lef5Zui5ri4&tm=nzb01_newb&from=&isAds=&departure=5aSn6L%2Be&tp=1460690497837_815"
+                needBook: true
+                preBookTime: "一天"
+                nonChange: true
+                nonRefundable: true
 
   /tourismProduct/waitCommentList:
     x-swagger-router-controller: DefaultController
     post:
-      operationId: tourismProduct_waitCommentList
+      operationId: tourismProductWaitCommentList
       tags:
         - 旅游产品
       description: 待评价产品列表（分页）
@@ -473,12 +712,29 @@ paths:
           schema:
             type: object
             properties:
+              code:
+                type: integer
               pagination:
                 $ref: '#/definitions/Pagination'
               data:
                 type: array
                 items:
                   $ref: '#/definitions/TourismProduct'
+          examples:
+            application/json:
+              code: 200
+              data:
+                - id: "10"
+                  userId: "10"
+                  shopId: "10"
+                  nickname: "angelababy"
+                  avataUrl: "https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=2484006459,1801900327&fm=58"
+                  content: "很好玩"
+                  score: 5
+                  time: "2016-04-14T01:20:50.52Z"
+                  imageList:
+                    - "http://img1.qunarzz.com/p/tts0/201405/27/6f81adf5f6dd9ef6c8d65eac.jpg_r_390x260x90_654d594b.jpg"
+                    - "httphttp://img1.qunarzz.com/p/tts3/201405/27/5d4ca9511dd89f0cc8d65eac.jpg_r_390x260x90_a2cd848c.jpg"
 
 ################################################################################
 #                                 城市                                         #
@@ -486,7 +742,7 @@ paths:
   /city/openList:
     x-swagger-router-controller: DefaultController
     post:
-      operationId: city_openList
+      operationId: cityOpenList
       tags:
         - 城市
       description: 已开通城市列表
@@ -501,6 +757,12 @@ paths:
                 type: array
                 items:
                   type: string
+          examples:
+            application/json:
+              code: 200
+              data:
+                - "大连"
+                - "沈阳"
 
 ################################################################################
 #                                 Definitions                                  #
@@ -549,7 +811,7 @@ definitions:
       signupTime:
         type: string
         description: 注册时间
-        format: date
+        format: date-time
       ageGroup:
         type: string
         description: 年龄段
@@ -591,11 +853,11 @@ definitions:
       startDate:
         type: string
         description: 开始时间
-        format: date
+        format: date-time
       endDate:
         type: string
         description: 结束时间
-        format: date
+        format: date-time
       imageList:
         type: array
         description: 产品图片列表（id列表，图片url根据文件服务器路径+图片id用固定的规则组装）
@@ -669,7 +931,7 @@ definitions:
       deadline:
         type: string
         description: 推荐截止日期
-        format: date
+        format: date-time
       index:
         type: integer
         description: 推荐排序
@@ -726,7 +988,7 @@ definitions:
       signupTime:
         type: string
         description: 注册时间
-        format: date
+        format: date-time
       imageList:
         type: array
         description: 产品图片列表（id列表，图片url根据文件服务器路径+图片id用固定的规则组装）
@@ -764,9 +1026,9 @@ definitions:
           type: string
       addr:
         $ref: '#/definitions/VillageAddr'
-      imageUrlList:
+      imageList:
         type: array
-        description: 乡村图片列表
+        description: 乡村图片列表（id列表，图片url根据文件服务器路径+图片id用固定的规则组装）
         items:
           type: string
       shopCount:
@@ -805,7 +1067,7 @@ definitions:
       time:
         type: string
         description: 评论时间
-        format: date
+        format: date-time
       imageUrlList:
         type: array
         description: 评论图片

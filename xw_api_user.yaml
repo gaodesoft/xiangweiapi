@@ -17,7 +17,7 @@ info:
     请求格式如下
 
     ```
-    https://api.xiangwei.com/xxx/xxx.do?json={key:value, ...}
+    https://api.xiangwei.com/xxx/xxx?jsonstring={key:value, ...}
     ```
     ### 响应格式
     返回数据格式均为json数据格式, 格式如下：
@@ -47,21 +47,25 @@ info:
     分页信息，只对分页请求有效。
 
 ################################################################################
-#                  Host, Base Path, Schemes and Content Types                  #
+#                  Host, Base Path, Schemes ,Content Types, parameters        #
 ################################################################################
-host: 192.168.1.162:10010
+host: 127.0.0.1:10010
 basePath: /m/v1
 schemes:
   - http
   - https
 produces:
   - application/json
-  - application/octet-stream
 consumes:
   - application/json
-  - application/octet-stream
 
-
+parameters:
+  token:
+    name: token
+    in: header
+    description: 登陆请求返回的token
+    required: false
+    type: string
 
 ################################################################################
 #                  tags                                                        #
@@ -90,47 +94,42 @@ paths:
 ################################################################################
   /auth/signin:
     x-swagger-router-controller: DefaultController
+    parameters:
+      - $ref: '#/parameters/token'
     post:
       operationId: authSignin
       tags:
         - 授权
       description: 登陆
       parameters:
-        - name: mobile
-          in: query
-          description: 手机号
+        - name: jsonstring
+          in: body
+          description: 地点
           required: true
-          type: string
-        - name: signinType
-          in: query
-          description: 登陆类型 0、手机号密码登陆  1、手机号验证码登陆
-          required: true
-          type: string
-        - name: pwd
-          in: query
-          description: 密码 signinType=0时有效
-          required: false
-          type: string
-        - name: smsCode
-          in: query
-          description: 验证码 signinType=1时有效
-          required: false
-          type: string
-        - name: deviceType
-          in: query
-          description: 设备类型 1、Android，2、iOS
-          required: false
-          type: string
-        - name: baiduUserId
-          in: query
-          description: 百度推送用
-          required: false
-          type: string
-        - name: channelId
-          in: query
-          description: 百度channelId，百度推送用
-          required: false
-          type: string
+          schema:
+            type: object
+            properties:
+              mobile:
+                type: string
+                description: 手机号
+              signinType:
+                type: integer
+                description: 登陆类型 0、手机号密码登陆  1、手机号验证码登陆
+              pwd:
+                type: string
+                description: 密码 signinType=0时有效
+              smsCode:
+                type: string
+                description: 验证码 signinType=1时有效
+              deviceType:
+                type: string
+                description: 设备类型 Android，iOS
+              baiduUserId:
+                type: string
+                description: 百度推送用
+              channelId:
+                type: string
+                description: 百度channelId，百度推送用
 
       responses:
         "200":
@@ -157,22 +156,27 @@ paths:
 
   /auth/sendVCode:
     x-swagger-router-controller: DefaultController
+    parameters:
+      - $ref: '#/parameters/token'
     post:
       operationId: authSendVCode
       tags:
         - 授权
       description: 发送验证码
       parameters:
-        - name: mobile
-          in: query
-          description: 手机号
+        - name: jsonstring
+          in: body
+          description: 地点
           required: true
-          type: string
-        - name: type
-          in: query
-          description: 验证码类型 1、登陆 2、找回支付密码
-          required: true
-          type: string
+          schema:
+            type: object
+            properties:
+              mobile:
+                type: string
+                description: 手机号
+              type:
+                type: integer
+                description: 验证码类型 1、登陆 2、找回支付密码
 
       responses:
         "200":
@@ -191,6 +195,8 @@ paths:
 
   /auth/signout:
     x-swagger-router-controller: DefaultController
+    parameters:
+      - $ref: '#/parameters/token'
     post:
       operationId: authSignout
       tags:
@@ -213,22 +219,27 @@ paths:
 
   /auth/supplementInfo:
     x-swagger-router-controller: DefaultController
+    parameters:
+      - $ref: '#/parameters/token'
     post:
       operationId: authSupplementInfo
       tags:
         - 授权
       description: 补充登陆信息（推送需要）
       parameters:
-        - name: baiduUserId
-          in: query
-          description: 百度推送用
+        - name: jsonstring
+          in: body
+          description: 地点
           required: true
-          type: string
-        - name: channelId
-          in: query
-          description: 百度channelId，百度推送用
-          required: true
-          type: string
+          schema:
+            type: object
+            properties:
+              baiduUserId:
+                type: string
+                description: 百度推送用
+              channelId:
+                type: string
+                description: 百度channelId，百度推送用
 
       responses:
         "200":
@@ -250,6 +261,8 @@ paths:
 ################################################################################
   /tag/list:
     x-swagger-router-controller: DefaultController
+    parameters:
+      - $ref: '#/parameters/token'
     post:
       operationId: tagList
       tags:
@@ -283,27 +296,30 @@ paths:
 ################################################################################
   /discover:
     x-swagger-router-controller: DefaultController
+    parameters:
+      - $ref: '#/parameters/token'
     post:
       operationId: discover
       tags:
         - 发现
       description: 发现列表（分页）
       parameters:
-        - name: city
-          in: query
-          description: 城市
+        - name: jsonstring
+          in: body
+          description: 地点
           required: true
-          type: string
-        - name: pageSize
-          in: query
-          description: 每页条数
-          required: true
-          type: string
-        - name: pageNumber
-          in: query
-          description: 页数
-          required: true
-          type: string
+          schema:
+            type: object
+            properties:
+              city:
+                type: string
+                description: 城市
+              pageSize:
+                type: integer
+                description: 每页条数
+              pageNumber:
+                type: integer
+                description: 请求的页码
 
       responses:
         "200":
@@ -380,27 +396,30 @@ paths:
 ################################################################################
   /village/list:
     x-swagger-router-controller: DefaultController
+    parameters:
+      - $ref: '#/parameters/token'
     post:
       operationId: villageList
       tags:
         - 乡村
       description: 特色乡村列表（分页）
       parameters:
-        - name: city
-          in: query
-          description: 城市
+        - name: jsonstring
+          in: body
+          description: 地点
           required: true
-          type: string
-        - name: pageSize
-          in: query
-          description: 每页条数
-          required: true
-          type: string
-        - name: pageNumber
-          in: query
-          description: 页数
-          required: true
-          type: string
+          schema:
+            type: object
+            properties:
+              city:
+                type: string
+                description: 城市
+              pageSize:
+                type: integer
+                description: 每页条数
+              pageNumber:
+                type: integer
+                description: 请求的页码
 
       responses:
         "200":
@@ -445,17 +464,24 @@ paths:
 
   /village/shopList:
     x-swagger-router-controller: DefaultController
+    parameters:
+      - $ref: '#/parameters/token'
     post:
       operationId: villageShopList
       tags:
         - 乡村
       description: 乡村商家列表
       parameters:
-        - name: villageId
-          in: query
-          description: 乡村标识
+        - name: jsonstring
+          in: body
+          description: 地点
           required: true
-          type: string
+          schema:
+            type: object
+            properties:
+              villageId:
+                type: string
+                description: 乡村标识
 
       responses:
         "200":
@@ -554,37 +580,36 @@ paths:
 ################################################################################
   /tourismProduct/list:
     x-swagger-router-controller: DefaultController
+    parameters:
+      - $ref: '#/parameters/token'
     post:
       operationId: tourismProductList
       tags:
         - 旅游产品
       description: 产品列表（分页）
       parameters:
-        - name: city
-          in: query
-          description: 城市 (有值时：按该城市筛选)
-          required: false
-          type: string
-        - name: tag
-          in: query
-          description: 主题 (有值时根据主题过滤)
-          required: false
-          type: string
-        - name: shopType
-          in: query
-          description: 店铺类型 (0、所有 1、农家 2、旅游公司 3、导游)
-          required: false
-          type: integer
-        - name: pageSize
-          in: query
-          description: 每页条数
+        - name: jsonstring
+          in: body
+          description: 地点
           required: true
-          type: string
-        - name: pageNumber
-          in: query
-          description: 页数
-          required: true
-          type: string
+          schema:
+            type: object
+            properties:
+              city:
+                type: string
+                description: 城市
+              tag:
+                type: string
+                description: 主题 (有值时根据主题过滤)
+              shopType:
+                type: integer
+                description: 店铺类型 (0、所有 1、农家 2、旅游公司 3、导游)
+              pageSize:
+                type: integer
+                description: 每页条数
+              pageNumber:
+                type: integer
+                description: 请求的页码
 
       responses:
         "200":
@@ -636,17 +661,24 @@ paths:
 
   /tourismProduct/info:
     x-swagger-router-controller: DefaultController
+    parameters:
+      - $ref: '#/parameters/token'
     post:
       operationId: tourismProductInfo
       tags:
         - 旅游产品
       description: 产品详细
       parameters:
-        - name: productId
-          in: query
-          description: 产品标识
+        - name: jsonstring
+          in: body
+          description: 地点
           required: true
-          type: string
+          schema:
+            type: object
+            properties:
+              productId:
+                type: string
+                description: 产品标识
 
       responses:
         "200":
@@ -689,22 +721,27 @@ paths:
 
   /tourismProduct/waitCommentList:
     x-swagger-router-controller: DefaultController
+    parameters:
+      - $ref: '#/parameters/token'
     post:
       operationId: tourismProductWaitCommentList
       tags:
         - 旅游产品
       description: 待评价产品列表（分页）
       parameters:
-        - name: pageSize
-          in: query
-          description: 每页条数
+        - name: jsonstring
+          in: body
+          description: 地点
           required: true
-          type: string
-        - name: pageNumber
-          in: query
-          description: 页数
-          required: true
-          type: string
+          schema:
+            type: object
+            properties:
+              pageSize:
+                type: integer
+                description: 每页条数
+              pageNumber:
+                type: integer
+                description: 请求的页码
 
       responses:
         "200":
@@ -741,6 +778,8 @@ paths:
 ################################################################################
   /city/openList:
     x-swagger-router-controller: DefaultController
+    parameters:
+      - $ref: '#/parameters/token'
     post:
       operationId: cityOpenList
       tags:

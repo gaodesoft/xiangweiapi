@@ -170,9 +170,6 @@ paths:
 
       responses:
         "200":
-          examples:
-            application/json:
-              data: 1
           description: Success
           schema:
             type: object
@@ -189,9 +186,6 @@ paths:
       description: 退出登陆
       responses:
         "200":
-          examples:
-            application/json:
-              data: 1
           description: Success
           schema:
             type: object
@@ -220,9 +214,6 @@ paths:
 
       responses:
         "200":
-          examples:
-            application/json:
-              data: 1
           description: Success
           schema:
             type: object
@@ -242,6 +233,15 @@ paths:
       description: 主题列表
       responses:
         "200":
+          examples:
+            application/json:
+              data:
+                - "采摘"
+                - "登山"
+                - "观光"
+                - "古镇"
+                - "亲子"
+                - "体验"
           description: Success
           schema:
             type: object

@@ -56,8 +56,10 @@ schemes:
   - https
 produces:
   - application/json
+  - application/octet-stream
 consumes:
   - application/json
+  - application/octet-stream
 
 parameters:
   token:

@@ -17,7 +17,7 @@ info:
     请求格式如下
 
     ```
-    https://api.xiangwei.com/xxx/xxx.do?json={key:value, ...}
+    https://api.xiangwei.com/xxx/xxx.do?jsonstring={key:value, ...}
     ```
     ### 响应格式
     返回数据格式均为json数据格式, 格式如下：
@@ -49,15 +49,24 @@ info:
 ################################################################################
 #                  Host, Base Path, Schemes and Content Types                  #
 ################################################################################
-host: localhost:10010
 basePath: /
 schemes:
   - http
   - https
 produces:
   - application/json
+  - application/octet-stream
 consumes:
   - application/json
+  - application/octet-stream
+
+parameters:
+  token:
+    name: token
+    in: header
+    description: 登陆请求返回的token
+    required: false
+    type: string
 
 ################################################################################
 #                  tags                                                        #
@@ -86,6 +95,8 @@ paths:
 ################################################################################
   /file/upload:
     x-swagger-router-controller: DefaultController
+    parameters:
+      - $ref: '#/parameters/token'
     post:
       operationId: fileUpload
       tags:
@@ -95,7 +106,7 @@ paths:
         - multipart/form-data
       parameters:
         - name: type
-          in: query
+          in: formData
           description: 文件类型 0、图片 1、语音 2、视频 3、其他
           required: true
           type: integer
@@ -111,62 +122,60 @@ paths:
           schema:
             type: object
             properties:
+              code:
+                type: integer
               data:
                 type: string
                 description: 图片标识
+          examples:
+            application/json:
+              code: 200
+              data: "100001"
+
 
 ################################################################################
 #                                 授权相关                                     #
 ################################################################################
   /auth/signup:
     x-swagger-router-controller: DefaultController
+    parameters:
+      - $ref: '#/parameters/token'
     post:
       operationId: authSignup
       tags:
         - 授权
       description: 注册
       parameters:
-        - name: mobile
-          in: query
-          description: 手机号
-          required: true
-          type: string
-        - name: pwd
-          in: query
-          description: 密码
-          required: true
-          type: string
-        - name: smsCode
-          in: query
-          description: 验证码
-          required: true
-          type: string
-        - name: shopType
-          in: query
-          description: 店铺类型 1、农户，2、个人导游 3、旅行社
-          required: true
-          type: integer
-        - name: addr
+        - name: jsonstring
           in: body
-          description: 地点
-          required: false
+          description: body
+          required: true
           schema:
-            $ref: '#/definitions/VillageAddr'
-        - name: deviceType
-          in: query
-          description: 设备类型 1、Android，2、iOS
-          required: false
-          type: string
-        - name: baiduUserId
-          in: query
-          description: 百度推送用
-          required: false
-          type: string
-        - name: channelId
-          in: query
-          description: 百度channelId，百度推送用
-          required: false
-          type: string
+            type: object
+            properties:
+              mobile:
+                type: string
+                description: 手机号
+              pwd:
+                type: string
+                description: 密码
+              smsCode:
+                type: string
+                description: 验证码
+              shopType:
+                type: string
+                description: 店铺类型 1、农户，2、个人导游 3、旅行社
+              addr:
+                $ref: '#/definitions/VillageAddr'
+              deviceType:
+                type: string
+                description: 设备类型 Android、iOS
+              baiduUserId:
+                type: string
+                description: 百度用户id，百度推送用
+              channelId:
+                type: string
+                description: 百度channelId，百度推送用
 
       responses:
         "200":
@@ -174,42 +183,47 @@ paths:
           schema:
             type: object
             properties:
+              code:
+                type: integer
               data:
                 $ref: '#/definitions/User'
+          examples:
+            application/json:
+              code: 200
+              data:
 
   /auth/signin:
     x-swagger-router-controller: DefaultController
+    parameters:
+      - $ref: '#/parameters/token'
     post:
       operationId: authSignin
       tags:
         - 授权
       description: 登陆
       parameters:
-        - name: mobile
-          in: query
-          description: 手机号
+        - name: jsonstring
+          in: body
+          description: body
           required: true
-          type: string
-        - name: pwd
-          in: query
-          description: 密码
-          required: true
-          type: string
-        - name: deviceType
-          in: query
-          description: 设备类型 1、Android，2、iOS
-          required: false
-          type: string
-        - name: baiduUserId
-          in: query
-          description: 百度推送用
-          required: false
-          type: string
-        - name: channelId
-          in: query
-          description: 百度channelId，百度推送用
-          required: false
-          type: string
+          schema:
+            type: object
+            properties:
+              mobile:
+                type: string
+                description: 手机号
+              pwd:
+                type: string
+                description: 密码 signinType=0时有效
+              deviceType:
+                type: string
+                description: 设备类型 Android，iOS
+              baiduUserId:
+                type: string
+                description: 百度推送用
+              channelId:
+                type: string
+                description: 百度channelId，百度推送用
 
       responses:
         "200":
@@ -217,27 +231,38 @@ paths:
           schema:
             type: object
             properties:
+              code:
+                type: integer
               data:
                 $ref: '#/definitions/User'
+          examples:
+            application/json:
+              code: 200
+              data:
 
   /auth/sendVCode:
     x-swagger-router-controller: DefaultController
+    parameters:
+      - $ref: '#/parameters/token'
     post:
       operationId: authSendVCode
       tags:
         - 授权
       description: 发送验证码
       parameters:
-        - name: mobile
-          in: query
-          description: 手机号
+        - name: jsonstring
+          in: body
+          description: body
           required: true
-          type: string
-        - name: type
-          in: query
-          description: 验证码类型 1、注册 2、找回登陆密码
-          required: true
-          type: string
+          schema:
+            type: object
+            properties:
+              mobile:
+                type: string
+                description: 手机号
+              type:
+                type: integer
+                description: 验证码类型 1、登陆 2、找回登陆密码
 
       responses:
         "200":
@@ -245,11 +270,19 @@ paths:
           schema:
             type: object
             properties:
+              code:
+                type: integer
               data:
                 type: boolean
+          examples:
+            application/json:
+              code: 200
+              data: true
 
   /auth/signout:
     x-swagger-router-controller: DefaultController
+    parameters:
+      - $ref: '#/parameters/token'
     post:
       operationId: authSignout
       tags:
@@ -262,27 +295,38 @@ paths:
           schema:
             type: object
             properties:
+              code:
+                type: integer
               data:
                 type: boolean
+          examples:
+            application/json:
+              code: 200
+              data: true
 
   /auth/supplementInfo:
     x-swagger-router-controller: DefaultController
+    parameters:
+      - $ref: '#/parameters/token'
     post:
       operationId: authSupplementInfo
       tags:
         - 授权
       description: 补充登陆信息（推送需要）
       parameters:
-        - name: baiduUserId
-          in: query
-          description: 百度推送用
+        - name: jsonstring
+          in: body
+          description: body
           required: true
-          type: string
-        - name: channelId
-          in: query
-          description: 百度channelId，百度推送用
-          required: true
-          type: string
+          schema:
+            type: object
+            properties:
+              baiduUserId:
+                type: string
+                description: 百度推送用
+              channelId:
+                type: string
+                description: 百度channelId，百度推送用
 
       responses:
         "200":
@@ -290,14 +334,22 @@ paths:
           schema:
             type: object
             properties:
+              code:
+                type: integer
               data:
                 type: boolean
+          examples:
+            application/json:
+              code: 200
+              data: true
 
 ################################################################################
 #                                 主题                                         #
 ################################################################################
   /tag/list:
     x-swagger-router-controller: DefaultController
+    parameters:
+      - $ref: '#/parameters/token'
     get:
       operationId: tagList
       tags:
@@ -309,37 +361,53 @@ paths:
           schema:
             type: object
             properties:
+              code:
+                type: integer
               data:
                 type: array
                 items:
                   type: string
                   description: 主题
+          examples:
+            application/json:
+              code: 200
+              data:
+                - "采摘"
+                - "登山"
+                - "观光"
+                - "古镇"
+                - "亲子"
+                - "体验"
+
 ################################################################################
 #                                 商户                                         #
 ################################################################################
   /user/pwdSetting:
     x-swagger-router-controller: DefaultController
+    parameters:
+      - $ref: '#/parameters/token'
     post:
       operationId: userPwdSetting
       tags:
         - 商户
       description: 密码设置
       parameters:
-        - name: mobile
-          in: query
-          description: 手机号
+        - name: jsonstring
+          in: body
+          description: body
           required: true
-          type: string
-        - name: pwd
-          in: query
-          description: 密码
-          required: true
-          type: string
-        - name: smsCode
-          in: query
-          description: 验证码
-          required: true
-          type: string
+          schema:
+            type: object
+            properties:
+              mobile:
+                type: string
+                description: 手机号
+              pwd:
+                type: string
+                description: 密码
+              smsCode:
+                type: string
+                description: 验证码
 
       responses:
         "200":
@@ -347,46 +415,62 @@ paths:
           schema:
             type: object
             properties:
+              code:
+                type: integer
               data:
                 type: boolean
+          examples:
+            application/json:
+              code: 200
+              data: true
 
   /user/realnameCertificate:
     x-swagger-router-controller: DefaultController
+    parameters:
+      - $ref: '#/parameters/token'
     post:
       operationId: userRealnameCertificate
       tags:
         - 商户
       description: 实名认证
-      consumes:
-        - multipart/form-data
       parameters:
-        - name: realname
-          in: query
-          description: 真实姓名
+        - name: jsonstring
+          in: body
+          description: body
           required: true
-          type: string
-        - name: IDNo
-          in: query
-          description: 身份证号
-          required: true
-          type: string
-        - name: file
-          in: formData
-          description: 身份证图片
-          required: true
-          type: file
+          schema:
+            type: object
+            properties:
+              realname:
+                type: string
+                description: 真实姓名
+              IDNo:
+                type: string
+                description: 身份证号
+              fileId:
+                type: string
+                description: 身份证图片文件id，通过file/upload上传返回后的id
+
       responses:
         "200":
           description: Success
           schema:
             type: object
             properties:
+              code:
+                type: integer
               data:
                 type: boolean
                 description: 是否成功
+          examples:
+            application/json:
+              code: 200
+              data: true
 
   /user/individualCertificate:
     x-swagger-router-controller: DefaultController
+    parameters:
+      - $ref: '#/parameters/token'
     post:
       operationId: userIndividualCertificate
       tags:
@@ -407,12 +491,20 @@ paths:
           schema:
             type: object
             properties:
+              code:
+                type: integer
               data:
                 type: boolean
                 description: 是否成功
+          examples:
+            application/json:
+              code: 200
+              data: true
 
   /user/companyCertificate:
     x-swagger-router-controller: DefaultController
+    parameters:
+      - $ref: '#/parameters/token'
     post:
       operationId: userCompanyCertificate
       tags:
@@ -421,21 +513,22 @@ paths:
       consumes:
         - multipart/form-data
       parameters:
-        - name: name
-          in: query
-          description: 企业名称
+        - name: jsonstring
+          in: body
+          description: body
           required: true
-          type: string
-        - name: legalPerson
-          in: query
-          description: 企业法人
-          required: true
-          type: string
-        - name: licenseImage
-          in: formData
-          description: 营业执照照片
-          required: true
-          type: file
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                description: 企业名称
+              legalPerson:
+                type: string
+                description: 企业法人
+              fileId:
+                type: string
+                description: 营业执照图片文件id，通过file/upload上传返回后的id
 
       responses:
         "200":
@@ -443,33 +536,42 @@ paths:
           schema:
             type: object
             properties:
+              code:
+                type: integer
               data:
                 type: boolean
                 description: 是否成功
+          examples:
+            application/json:
+              code: 200
+              data: true
 
   /user/contactSetting:
     x-swagger-router-controller: DefaultController
+    parameters:
+      - $ref: '#/parameters/token'
     post:
       operationId: userContactSetting
       tags:
         - 商户
       description: 联系方式设置
       parameters:
-        - name: tel
-          in: query
-          description: 联系电话，值不为null时才会修改
-          required: false
-          type: string
-        - name: qq
-          in: query
-          description: qq号，值不为null时才会修改
-          required: false
-          type: string
-        - name: weixin
-          in: query
-          description: 微信号，值不为null时才会修改
-          required: false
-          type: string
+        - name: jsonstring
+          in: body
+          description: body
+          required: true
+          schema:
+            type: object
+            properties:
+              tel:
+                type: string
+                description: 联系电话，值不为null时才会修改
+              qq:
+                type: string
+                description: qq号，值不为null时才会修改
+              weixin:
+                type: string
+                description: 微信号，值不为null时才会修改
 
       responses:
         "200":
@@ -477,12 +579,20 @@ paths:
           schema:
             type: object
             properties:
+              code:
+                type: integer
               data:
                 type: boolean
                 description: 是否成功
+          examples:
+            application/json:
+              code: 200
+              data: true
 
   /user/avatarUpload:
     x-swagger-router-controller: DefaultController
+    parameters:
+      - $ref: '#/parameters/token'
     post:
       operationId: userAvatarUpload
       tags:
@@ -503,64 +613,83 @@ paths:
           schema:
             type: object
             properties:
+              code:
+                type: integer
               data:
                 type: boolean
                 description: 是否成功
+          examples:
+            application/json:
+              code: 200
+              data: true
 
   /user/shopImagesSave:
+    x-swagger-router-controller: DefaultController
+    parameters:
+      - $ref: '#/parameters/token'
     post:
       operationId: userShopImagesSave
       tags:
         - 商户
       description: 店铺图片保存，该接口依赖文件上传接口，文件上传成功后使用返回的图片标识作为该接口的请求参数
       parameters:
-        - name: imageIds
+        - name: jsonstring
           in: body
-          description: 图片标识数组
+          description: 地点
           required: true
           schema:
-            type: array
-            items:
-              type: string
+            type: object
+            properties:
+              imageIds:
+                type: array
+                description: 图片标识数组
+                items:
+                  type: string
+
       responses:
         "200":
           description: Success
           schema:
             type: object
             properties:
+              code:
+                type: integer
               data:
                 type: boolean
                 description: 是否成功
+          examples:
+            application/json:
+              code: 200
+              data: true
 
   /user/baseSetting:
     x-swagger-router-controller: DefaultController
+    parameters:
+      - $ref: '#/parameters/token'
     post:
       operationId: userBaseSetting
       tags:
         - 商户
       description: 商铺基本信息设置， 店铺名、店铺描述、店铺地址、客服时间等设置
       parameters:
-        - name: shopName
-          in: query
-          description: 名称，值不为null时才会修改
-          required: false
-          type: string
-        - name: desc
-          in: query
-          description: 描述，值不为null时才会修改
-          required: false
-          type: string
-        - name: addr
+        - name: jsonstring
           in: body
-          description: 地点，值不为null时才会修改
-          required: false
+          description: 地点
+          required: true
           schema:
-            $ref: '#/definitions/VillageAddr'
-        - name: serviceTime
-          in: query
-          description: 服务时间， e.g. 全天、周一至周五、早9:00至晚21：00等等，值不为null时才会修改
-          required: false
-          type: string
+            type: object
+            properties:
+              shopName:
+                type: string
+                description: 名称，值不为null时才会修改
+              desc:
+                type: string
+                description: 描述，值不为null时才会修改
+              addr:
+                $ref: '#/definitions/VillageAddr'
+              serviceTime:
+                type: string
+                description: 服务时间， e.g. 全天、周一至周五、早9:00至晚21：00等等，值不为null时才会修改
 
       responses:
         "200":
@@ -568,9 +697,15 @@ paths:
           schema:
             type: object
             properties:
+              code:
+                type: integer
               data:
                 type: boolean
                 description: 是否成功
+          examples:
+            application/json:
+              code: 200
+              data: true
 
 
 ################################################################################
@@ -578,22 +713,27 @@ paths:
 ################################################################################
   /tourismProduct/list:
     x-swagger-router-controller: DefaultController
+    parameters:
+      - $ref: '#/parameters/token'
     post:
       operationId: tourismList
       tags:
         - 旅游产品
       description: 产品列表（分页）
       parameters:
-        - name: pageSize
-          in: query
-          description: 每页条数
+        - name: jsonstring
+          in: body
+          description: body
           required: true
-          type: string
-        - name: pageNumber
-          in: query
-          description: 页数
-          required: true
-          type: string
+          schema:
+            type: object
+            properties:
+              pageSize:
+                type: integer
+                description: 每页条数
+              pageNumber:
+                type: integer
+                description: 请求的页码
 
       responses:
         "200":
@@ -601,26 +741,68 @@ paths:
           schema:
             type: object
             properties:
+              code:
+                type: integer
               pagination:
                 $ref: '#/definitions/Pagination'
               data:
                 type: array
                 items:
                   $ref: '#/definitions/TourismProduct'
+          examples:
+            application/json:
+              code: 200
+              pagination:
+                pageNumber: 1
+                totalPage: 10
+                pageSize: 10
+                totalCount: 100
+              data:
+                - id: "1001"
+                  shopId: "1000"
+                  name: "大连威海蓬莱两晚三天游"
+                  desc: "大连，蓬莱威海超值3日游，含大连到烟台三等B船票"
+                  tags:
+                    - "观光"
+                  price: 10
+                  salesPrice: 10
+                  addr:
+                    province: "辽宁"
+                    city: "大连"
+                    area: "高新区"
+                    town: "敬贤街"
+                    village: "桃花源"
+                  startDate: "2016-04-14T01:20:50.52Z"
+                  endDate: "2016-04-30T01:20:50.52Z"
+                  imageList:
+                    - "http://img1.qunarzz.com/p/tts0/201405/27/6f81adf5f6dd9ef6c8d65eac.jpg_r_390x260x90_654d594b.jpg"
+                    - "http://img1.qunarzz.com/p/tts3/201405/27/5d4ca9511dd89f0cc8d65eac.jpg_r_390x260x90_a2cd848c.jpg"
+                  detailUrl: "http://qdcq3.package.qunar.com/user/detail.jsp?id=838222527&ttsRouteType=周边游&ad_departure=5aSn6L%2Be&ad_arrive=5ZGo6L655ri4&filterDate=&qssrc=eyJ0cyI6IjE0NjA2OTA0OTcyMDEiLCJzcmMiOiJhbGwuZW52YiIsImFjdCI6ImZpbHRlciJ9&ts=1460690498206_264#route_id=15493072&productId=838222527&vendorid=qb2c_qdcq&DepLastDate=2016-07-14&tf=&searchid=1460690498206_264&arrive=5ZGo6L655ri4&DepDate=2016-04-16&vendor=6Z2S5bKb5Zu96ZmF5peF6KGM56S%2B&djtf=&function=6Lef5Zui5ri4&tm=nzb01_newb&from=&isAds=&departure=5aSn6L%2Be&tp=1460690497837_815"
+                  needBook: true
+                  preBookTime: "一天"
+                  nonChange: true
+                  nonRefundable: true
 
   /tourismProduct/info:
     x-swagger-router-controller: DefaultController
+    parameters:
+      - $ref: '#/parameters/token'
     post:
       operationId: tourismInfo
       tags:
         - 旅游产品
       description: 产品详细
       parameters:
-        - name: productId
-          in: query
-          description: 产品标识
+        - name: jsonstring
+          in: body
+          description: body
           required: true
-          type: string
+          schema:
+            type: object
+            properties:
+              productId:
+                type: string
+                description: 产品标识
 
       responses:
         "200":
@@ -628,88 +810,104 @@ paths:
           schema:
             type: object
             properties:
+              code:
+                type: integer
               data:
                 $ref: '#/definitions/TourismProduct'
+          examples:
+            application/json:
+              code: 200
+              data:
+                id: "1001"
+                shopId: "1000"
+                name: "大连威海蓬莱两晚三天游"
+                desc: "大连，蓬莱威海超值3日游，含大连到烟台三等B船票"
+                tags:
+                  - "观光"
+                price: 10
+                salesPrice: 10
+                addr:
+                  province: "辽宁"
+                  city: "大连"
+                  area: "高新区"
+                  town: "敬贤街"
+                  village: "桃花源"
+                startDate: "2016-04-14T01:20:50.52Z"
+                endDate: "2016-04-30T01:20:50.52Z"
+                imageList:
+                  - "http://img1.qunarzz.com/p/tts0/201405/27/6f81adf5f6dd9ef6c8d65eac.jpg_r_390x260x90_654d594b.jpg"
+                  - "http://img1.qunarzz.com/p/tts3/201405/27/5d4ca9511dd89f0cc8d65eac.jpg_r_390x260x90_a2cd848c.jpg"
+                detailUrl: "http://qdcq3.package.qunar.com/user/detail.jsp?id=838222527&ttsRouteType=周边游&ad_departure=5aSn6L%2Be&ad_arrive=5ZGo6L655ri4&filterDate=&qssrc=eyJ0cyI6IjE0NjA2OTA0OTcyMDEiLCJzcmMiOiJhbGwuZW52YiIsImFjdCI6ImZpbHRlciJ9&ts=1460690498206_264#route_id=15493072&productId=838222527&vendorid=qb2c_qdcq&DepLastDate=2016-07-14&tf=&searchid=1460690498206_264&arrive=5ZGo6L655ri4&DepDate=2016-04-16&vendor=6Z2S5bKb5Zu96ZmF5peF6KGM56S%2B&djtf=&function=6Lef5Zui5ri4&tm=nzb01_newb&from=&isAds=&departure=5aSn6L%2Be&tp=1460690497837_815"
+                needBook: true
+                preBookTime: "一天"
+                nonChange: true
+                nonRefundable: true
 
   /tourismProduct/baseSave:
     x-swagger-router-controller: DefaultController
+    parameters:
+      - $ref: '#/parameters/token'
     post:
       operationId: tourismBaseSave
       tags:
         - 旅游产品
       description: 产品基本信息保存
       parameters:
-        - name: productId
-          in: query
-          description: 产品标识， 为空时则为新建产品
-          required: false
-          type: string
-        - name: name
-          in: query
-          description: 产品名
-          required: true
-          type: string
-        - name: desc
-          in: query
-          description: 产品描述
-          required: false
-          type: string
-        - name: tags
-          in: query
-          description: 产品标签，多个
-          required: true
-          type: string
-        - name: price
-          in: query
-          description: 价格
-          required: true
-          type: number
-        - name: salsPrice
-          in: query
-          description: 促销价格
-          required: true
-          type: number
-        - name: autoConfirm
-          in: query
-          description: 是否自动确认
-          required: false
-          type: boolean
-        - name: needBook
-          in: query
-          description: 是否需要预定
-          required: false
-          type: boolean
-        - name: preBookTime
-          in: query
-          description: 预定提前时间
-          required: false
-          type: string
-        - name: nonRefundable
-          in: query
-          description: true:不可退 false:可退
-          required: false
-          type: boolean
-        - name: nonChange
-          in: query
-          description: true:不可改 false:可改
-          required: false
-          type: boolean
-        - name: startDate
-          in: query
-          description: 产品有效时间-开始时间
-          required: false
-          type: string
-        - name: endDate
-          in: query
-          description: 产品有效时间-结束时间
-          required: false
-          type: string
-        - name: addr
+        - name: jsonstring
           in: body
-          description: 地点
-          required: false
+          description: body
+          required: true
           schema:
-            $ref: '#/definitions/VillageAddr'
+            type: object
+            properties:
+              productId:
+                type: string
+                description: 产品标识， 为空时则为新建产品
+              name:
+                type: string
+                description: 产品名
+              desc:
+                type: string
+                description: 产品描述
+              tags:
+                type: array
+                description: 产品标签
+                items:
+                  type: string
+              price:
+                type: number
+                description: 价格
+              salsPrice:
+                type: number
+                description: 促销价
+              autoConfirm:
+                type: boolean
+                description: 是否自动确认
+              needBook:
+                type: boolean
+                description: 是否需要预定
+              preBookTime:
+                type: string
+                description: 预定提前时间
+              nonRefundable:
+                type: boolean
+                description: true:不可退 false:可退
+              nonChange:
+                type: string
+                description: true:不可改 false:可改
+              startDate:
+                type: string
+                description: 产品有效时间-开始时间
+              endDate:
+                type: string
+                description: 产品有效时间-结束时间
+              addr:
+                $ref: '#/definitions/VillageAddr'
+              imageIds:
+                type: array
+                description: 图片标识数组, 产品原有的imageId或者使用file/upload上传反回的imageId
+                items:
+                  type: string
 
       responses:
         "200":
@@ -717,68 +915,48 @@ paths:
           schema:
             type: object
             properties:
+              code:
+                type: integer
               data:
                 type: string
                 description: 产品标识
+          examples:
+            application/json:
+              code: 200
+              data: "100"
 
-  /tourismProduct/imagesSave:
-    x-swagger-router-controller: DefaultController
-    post:
-      operationId: tourismImageSave
-      tags:
-        - 旅游产品
-      description: 产品图片保存，该接口依赖文件上传接口，文件上传成功后使用返回的图片标识作为该接口的请求参数
-      parameters:
-        - name: imageIds
-          in: body
-          description: 图片标识数组
-          required: true
-          schema:
-            type: array
-            items:
-              type: string
-
-      responses:
-        "200":
-          description: Success
-          schema:
-            type: object
-            properties:
-              data:
-                type: boolean
-                description: 是否成功
 
   /tourismProduct/imageTextDetailSave:
     x-swagger-router-controller: DefaultController
+    parameters:
+      - $ref: '#/parameters/token'
     post:
       operationId: tourismImageTextDetailSave
       tags:
         - 旅游产品
       description: 图文详细信息保存，该接口依赖文件上传接口
       parameters:
-        - name: productId
-          in: query
-          description: 产品标识
-          required: true
-          type: string
-        - name: detailId
-          in: query
-          description: 图文详细标识， 修改时需要
-          required: false
-          type: string
-        - name: text
-          in: query
-          description: 图片说明
-          required: false
-          type: string
-        - name: imageIds
+        - name: jsonstring
           in: body
-          description: 图片标识数组
+          description: body
           required: true
           schema:
-            type: array
-            items:
-              type: string
+            type: object
+            properties:
+              productId:
+                type: string
+                description: 产品标识
+              detailId:
+                type: string
+                description: 图文详细标识， 为null时表示添加，不为null时表示修改
+              text:
+                type: string
+                description: 图片说明
+              imageIds:
+                type: array
+                description: 图片标识数组, 原有的imageId或者使用file/upload上传反回的imageId
+                items:
+                  type: string
 
       responses:
         "200":
@@ -786,28 +964,39 @@ paths:
           schema:
             type: object
             properties:
+              code:
+                type: integer
               data:
                 type: string
                 description: 标识
+          examples:
+            application/json:
+              code: 200
+              data: "100"
 
   /tourismProduct/imageTextDetailDelete:
     x-swagger-router-controller: DefaultController
+    parameters:
+      - $ref: '#/parameters/token'
     post:
       operationId: tourismImageTextDetailDelete
       tags:
         - 旅游产品
       description: 图文详细信息删除
       parameters:
-        - name: productId
-          in: query
-          description: 产品标识
+        - name: jsonstring
+          in: body
+          description: body
           required: true
-          type: string
-        - name: detailId
-          in: query
-          description: 图文详细标识
-          required: true
-          type: string
+          schema:
+            type: object
+            properties:
+              productId:
+                type: string
+                description: 产品标识
+              detailId:
+                type: string
+                description: 图文详细标识
 
       responses:
         "200":
@@ -815,41 +1004,47 @@ paths:
           schema:
             type: object
             properties:
+              code:
+                type: integer
               data:
                 type: boolean
                 description: 是否成功
+          examples:
+            application/json:
+              code: 200
+              data: true
 
   /tourismProduct/itemSave:
     x-swagger-router-controller: DefaultController
+    parameters:
+      - $ref: '#/parameters/token'
     post:
       operationId: tourismItemSave
       tags:
         - 旅游产品
       description: 产品事项保存，该接口依赖文件上传接口
       parameters:
-        - name: productId
-          in: query
-          description: 产品标识
-          required: true
-          type: string
-        - name: type
-          in: query
-          description: 事项类型 1、行程安排 2、购买提示 3、费用说明 4、其他说明
-          required: true
-          type: string
-        - name: text
-          in: query
-          description: 文字说明
-          required: false
-          type: string
-        - name: imageIds
+        - name: jsonstring
           in: body
-          description: 事项图片
+          description: body
           required: true
           schema:
-            type: array
-            items:
-              type: string
+            type: object
+            properties:
+              productId:
+                type: string
+                description: 产品标识
+              type:
+                type: integer
+                description: 事项类型 1、行程安排 2、购买提示 3、费用说明
+              text:
+                type: string
+                description: 文字说明
+              imageIds:
+                type: array
+                description: 图片标识数组, 原有的imageId或者使用file/upload上传反回的imageId
+                items:
+                  type: string
 
       responses:
         "200":
@@ -857,102 +1052,151 @@ paths:
           schema:
             type: object
             properties:
+              code:
+                type: integer
               data:
                 type: string
                 description: 标识
+          examples:
+            application/json:
+              code: 200
+              data: "100"
 
   /tourismProduct/publish:
     x-swagger-router-controller: DefaultController
+    parameters:
+      - $ref: '#/parameters/token'
     post:
       operationId: tourismPublish
       tags:
         - 旅游产品
       description: 发布
       parameters:
-        - name: productId
-          in: query
-          description: 产品标识
+        - name: jsonstring
+          in: body
+          description: body
           required: true
-          type: string
+          schema:
+            type: object
+            properties:
+              productId:
+                type: string
+                description: 产品标识
       responses:
         "200":
           description: Success
           schema:
             type: object
             properties:
+              code:
+                type: integer
               data:
                 type: boolean
                 description: 是否成功
+          examples:
+            application/json:
+              code: 200
+              data: true
 
   /tourismProduct/soldOut:
     x-swagger-router-controller: DefaultController
+    parameters:
+      - $ref: '#/parameters/token'
     post:
       operationId: tourismSoldOut
       tags:
         - 旅游产品
       description: 下架
       parameters:
-        - name: productId
-          in: query
-          description: 产品标识
+        - name: jsonstring
+          in: body
+          description: body
           required: true
-          type: string
+          schema:
+            type: object
+            properties:
+              productId:
+                type: string
+                description: 产品标识
+
       responses:
         "200":
           description: Success
           schema:
             type: object
             properties:
+              code:
+                type: integer
               data:
                 type: boolean
                 description: 是否成功
+          examples:
+            application/json:
+              code: 200
+              data: true
 
   /tourismProduct/recomentApply:
     x-swagger-router-controller: DefaultController
+    parameters:
+      - $ref: '#/parameters/token'
     post:
       operationId: tourismRecomentApply
       tags:
         - 旅游产品
       description: 申请推荐
       parameters:
-        - name: productId
-          in: query
-          description: 产品标识
+        - name: jsonstring
+          in: body
+          description: body
           required: true
-          type: string
+          schema:
+            type: object
+            properties:
+              productId:
+                type: string
+                description: 产品标识
       responses:
         "200":
           description: Success
           schema:
             type: object
             properties:
+              code:
+                type: integer
               data:
                 type: boolean
                 description: 是否成功
+          examples:
+            application/json:
+              code: 200
+              data: true
 
   /tourismProduct/commentList:
     x-swagger-router-controller: DefaultController
+    parameters:
+      - $ref: '#/parameters/token'
     get:
       operationId: tourismProductCommentList
       tags:
         - 旅游产品
       description: 产品评价列表（分页）
       parameters:
-        - name: productId
-          in: query
-          description: 产品标识
+        - name: jsonstring
+          in: body
+          description: body
           required: true
-          type: string
-        - name: pageSize
-          in: query
-          description: 每页条数
-          required: true
-          type: string
-        - name: pageNumber
-          in: query
-          description: 页数
-          required: true
-          type: string
+          schema:
+            type: object
+            properties:
+              productId:
+                type: string
+                description: 产品标识
+              pageSize:
+                type: integer
+                description: 每页条数
+              pageNumber:
+                type: integer
+                description: 请求的页码
 
       responses:
         "200":
@@ -960,18 +1204,42 @@ paths:
           schema:
             type: object
             properties:
+              code:
+                type: integer
               pagination:
                 $ref: '#/definitions/Pagination'
               data:
                 type: array
                 items:
                   $ref: '#/definitions/Comment'
+          examples:
+            application/json:
+              code: 200
+              pagination:
+                pageNumber: 1
+                totalPage: 10
+                pageSize: 10
+                totalCount: 100
+              data:
+                - id: "10"
+                  userId: "10"
+                  shopId: "10"
+                  nickname: "angelababy"
+                  avataUrl: "https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=2484006459,1801900327&fm=58"
+                  content: "很好玩"
+                  score: 5
+                  time: "2016-04-14T01:20:50.52Z"
+                  imageList:
+                    - "http://img1.qunarzz.com/p/tts0/201405/27/6f81adf5f6dd9ef6c8d65eac.jpg_r_390x260x90_654d594b.jpg"
+                    - "httphttp://img1.qunarzz.com/p/tts3/201405/27/5d4ca9511dd89f0cc8d65eac.jpg_r_390x260x90_a2cd848c.jpg"
 
 ################################################################################
 #                                 城市                                         #
 ################################################################################
   /city/openCityList:
     x-swagger-router-controller: DefaultController
+    parameters:
+      - $ref: '#/parameters/token'
     get:
       operationId: cityOpenCityListList
       tags:
@@ -988,19 +1256,33 @@ paths:
                 type: array
                 items:
                   type: string
+          examples:
+            application/json:
+              code: 200
+              data:
+                - "大连"
+                - "沈阳"
+
   /city/openVillageList:
     x-swagger-router-controller: DefaultController
+    parameters:
+      - $ref: '#/parameters/token'
     get:
       operationId: cityOpenVillageList
       tags:
         - 城市
       description: 已开通乡村列表
       parameters:
-        - name: city
-          in: query
-          description: 城市
+        - name: jsonstring
+          in: body
+          description: body
           required: true
-          type: string
+          schema:
+            type: object
+            properties:
+              city:
+                type: string
+                description: 城市
 
       responses:
         "200":

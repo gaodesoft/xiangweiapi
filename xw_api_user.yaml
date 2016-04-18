@@ -104,7 +104,7 @@ paths:
       parameters:
         - name: jsonstring
           in: body
-          description: 地点
+          description: body
           required: true
           schema:
             type: object
@@ -166,7 +166,7 @@ paths:
       parameters:
         - name: jsonstring
           in: body
-          description: 地点
+          description: body
           required: true
           schema:
             type: object
@@ -229,7 +229,7 @@ paths:
       parameters:
         - name: jsonstring
           in: body
-          description: 地点
+          description: body
           required: true
           schema:
             type: object
@@ -306,7 +306,7 @@ paths:
       parameters:
         - name: jsonstring
           in: body
-          description: 地点
+          description: body
           required: true
           schema:
             type: object
@@ -384,8 +384,8 @@ paths:
                     endDate: "2016-04-30T01:20:50.52Z"
                     imageList:
                       - "http://img1.qunarzz.com/p/tts0/201405/27/6f81adf5f6dd9ef6c8d65eac.jpg_r_390x260x90_654d594b.jpg"
-                      - "httphttp://img1.qunarzz.com/p/tts3/201405/27/5d4ca9511dd89f0cc8d65eac.jpg_r_390x260x90_a2cd848c.jpg"
-                    detailUrl: "httpshttp://qdcq3.package.qunar.com/user/detail.jsp?id=838222527&ttsRouteType=周边游&ad_departure=5aSn6L%2Be&ad_arrive=5ZGo6L655ri4&filterDate=&qssrc=eyJ0cyI6IjE0NjA2OTA0OTcyMDEiLCJzcmMiOiJhbGwuZW52YiIsImFjdCI6ImZpbHRlciJ9&ts=1460690498206_264#route_id=15493072&productId=838222527&vendorid=qb2c_qdcq&DepLastDate=2016-07-14&tf=&searchid=1460690498206_264&arrive=5ZGo6L655ri4&DepDate=2016-04-16&vendor=6Z2S5bKb5Zu96ZmF5peF6KGM56S%2B&djtf=&function=6Lef5Zui5ri4&tm=nzb01_newb&from=&isAds=&departure=5aSn6L%2Be&tp=1460690497837_815"
+                      - "http://img1.qunarzz.com/p/tts3/201405/27/5d4ca9511dd89f0cc8d65eac.jpg_r_390x260x90_a2cd848c.jpg"
+                    detailUrl: "http://qdcq3.package.qunar.com/user/detail.jsp?id=838222527&ttsRouteType=周边游&ad_departure=5aSn6L%2Be&ad_arrive=5ZGo6L655ri4&filterDate=&qssrc=eyJ0cyI6IjE0NjA2OTA0OTcyMDEiLCJzcmMiOiJhbGwuZW52YiIsImFjdCI6ImZpbHRlciJ9&ts=1460690498206_264#route_id=15493072&productId=838222527&vendorid=qb2c_qdcq&DepLastDate=2016-07-14&tf=&searchid=1460690498206_264&arrive=5ZGo6L655ri4&DepDate=2016-04-16&vendor=6Z2S5bKb5Zu96ZmF5peF6KGM56S%2B&djtf=&function=6Lef5Zui5ri4&tm=nzb01_newb&from=&isAds=&departure=5aSn6L%2Be&tp=1460690497837_815"
                     needBook: true
                     preBookTime: "一天"
                     nonChange: true
@@ -406,7 +406,7 @@ paths:
       parameters:
         - name: jsonstring
           in: body
-          description: 地点
+          description: body
           required: true
           schema:
             type: object
@@ -474,7 +474,7 @@ paths:
       parameters:
         - name: jsonstring
           in: body
-          description: 地点
+          description: body
           required: true
           schema:
             type: object
@@ -568,8 +568,8 @@ paths:
                         endDate: "2016-04-30T01:20:50.52Z"
                         imageList:
                           - "http://img1.qunarzz.com/p/tts0/201405/27/6f81adf5f6dd9ef6c8d65eac.jpg_r_390x260x90_654d594b.jpg"
-                          - "httphttp://img1.qunarzz.com/p/tts3/201405/27/5d4ca9511dd89f0cc8d65eac.jpg_r_390x260x90_a2cd848c.jpg"
-                        detailUrl: "httpshttp://qdcq3.package.qunar.com/user/detail.jsp?id=838222527&ttsRouteType=周边游&ad_departure=5aSn6L%2Be&ad_arrive=5ZGo6L655ri4&filterDate=&qssrc=eyJ0cyI6IjE0NjA2OTA0OTcyMDEiLCJzcmMiOiJhbGwuZW52YiIsImFjdCI6ImZpbHRlciJ9&ts=1460690498206_264#route_id=15493072&productId=838222527&vendorid=qb2c_qdcq&DepLastDate=2016-07-14&tf=&searchid=1460690498206_264&arrive=5ZGo6L655ri4&DepDate=2016-04-16&vendor=6Z2S5bKb5Zu96ZmF5peF6KGM56S%2B&djtf=&function=6Lef5Zui5ri4&tm=nzb01_newb&from=&isAds=&departure=5aSn6L%2Be&tp=1460690497837_815"
+                          - "http://img1.qunarzz.com/p/tts3/201405/27/5d4ca9511dd89f0cc8d65eac.jpg_r_390x260x90_a2cd848c.jpg"
+                        detailUrl: "http://qdcq3.package.qunar.com/user/detail.jsp?id=838222527&ttsRouteType=周边游&ad_departure=5aSn6L%2Be&ad_arrive=5ZGo6L655ri4&filterDate=&qssrc=eyJ0cyI6IjE0NjA2OTA0OTcyMDEiLCJzcmMiOiJhbGwuZW52YiIsImFjdCI6ImZpbHRlciJ9&ts=1460690498206_264#route_id=15493072&productId=838222527&vendorid=qb2c_qdcq&DepLastDate=2016-07-14&tf=&searchid=1460690498206_264&arrive=5ZGo6L655ri4&DepDate=2016-04-16&vendor=6Z2S5bKb5Zu96ZmF5peF6KGM56S%2B&djtf=&function=6Lef5Zui5ri4&tm=nzb01_newb&from=&isAds=&departure=5aSn6L%2Be&tp=1460690497837_815"
                         needBook: true
                         preBookTime: "一天"
                         nonChange: true
@@ -590,7 +590,7 @@ paths:
       parameters:
         - name: jsonstring
           in: body
-          description: 地点
+          description: body
           required: true
           schema:
             type: object
@@ -652,8 +652,8 @@ paths:
                   endDate: "2016-04-30T01:20:50.52Z"
                   imageList:
                     - "http://img1.qunarzz.com/p/tts0/201405/27/6f81adf5f6dd9ef6c8d65eac.jpg_r_390x260x90_654d594b.jpg"
-                    - "httphttp://img1.qunarzz.com/p/tts3/201405/27/5d4ca9511dd89f0cc8d65eac.jpg_r_390x260x90_a2cd848c.jpg"
-                  detailUrl: "httpshttp://qdcq3.package.qunar.com/user/detail.jsp?id=838222527&ttsRouteType=周边游&ad_departure=5aSn6L%2Be&ad_arrive=5ZGo6L655ri4&filterDate=&qssrc=eyJ0cyI6IjE0NjA2OTA0OTcyMDEiLCJzcmMiOiJhbGwuZW52YiIsImFjdCI6ImZpbHRlciJ9&ts=1460690498206_264#route_id=15493072&productId=838222527&vendorid=qb2c_qdcq&DepLastDate=2016-07-14&tf=&searchid=1460690498206_264&arrive=5ZGo6L655ri4&DepDate=2016-04-16&vendor=6Z2S5bKb5Zu96ZmF5peF6KGM56S%2B&djtf=&function=6Lef5Zui5ri4&tm=nzb01_newb&from=&isAds=&departure=5aSn6L%2Be&tp=1460690497837_815"
+                    - "http://img1.qunarzz.com/p/tts3/201405/27/5d4ca9511dd89f0cc8d65eac.jpg_r_390x260x90_a2cd848c.jpg"
+                  detailUrl: "http://qdcq3.package.qunar.com/user/detail.jsp?id=838222527&ttsRouteType=周边游&ad_departure=5aSn6L%2Be&ad_arrive=5ZGo6L655ri4&filterDate=&qssrc=eyJ0cyI6IjE0NjA2OTA0OTcyMDEiLCJzcmMiOiJhbGwuZW52YiIsImFjdCI6ImZpbHRlciJ9&ts=1460690498206_264#route_id=15493072&productId=838222527&vendorid=qb2c_qdcq&DepLastDate=2016-07-14&tf=&searchid=1460690498206_264&arrive=5ZGo6L655ri4&DepDate=2016-04-16&vendor=6Z2S5bKb5Zu96ZmF5peF6KGM56S%2B&djtf=&function=6Lef5Zui5ri4&tm=nzb01_newb&from=&isAds=&departure=5aSn6L%2Be&tp=1460690497837_815"
                   needBook: true
                   preBookTime: "一天"
                   nonChange: true
@@ -671,7 +671,7 @@ paths:
       parameters:
         - name: jsonstring
           in: body
-          description: 地点
+          description: body
           required: true
           schema:
             type: object
@@ -712,8 +712,8 @@ paths:
                 endDate: "2016-04-30T01:20:50.52Z"
                 imageList:
                   - "http://img1.qunarzz.com/p/tts0/201405/27/6f81adf5f6dd9ef6c8d65eac.jpg_r_390x260x90_654d594b.jpg"
-                  - "httphttp://img1.qunarzz.com/p/tts3/201405/27/5d4ca9511dd89f0cc8d65eac.jpg_r_390x260x90_a2cd848c.jpg"
-                detailUrl: "httpshttp://qdcq3.package.qunar.com/user/detail.jsp?id=838222527&ttsRouteType=周边游&ad_departure=5aSn6L%2Be&ad_arrive=5ZGo6L655ri4&filterDate=&qssrc=eyJ0cyI6IjE0NjA2OTA0OTcyMDEiLCJzcmMiOiJhbGwuZW52YiIsImFjdCI6ImZpbHRlciJ9&ts=1460690498206_264#route_id=15493072&productId=838222527&vendorid=qb2c_qdcq&DepLastDate=2016-07-14&tf=&searchid=1460690498206_264&arrive=5ZGo6L655ri4&DepDate=2016-04-16&vendor=6Z2S5bKb5Zu96ZmF5peF6KGM56S%2B&djtf=&function=6Lef5Zui5ri4&tm=nzb01_newb&from=&isAds=&departure=5aSn6L%2Be&tp=1460690497837_815"
+                  - "http://img1.qunarzz.com/p/tts3/201405/27/5d4ca9511dd89f0cc8d65eac.jpg_r_390x260x90_a2cd848c.jpg"
+                detailUrl: "http://qdcq3.package.qunar.com/user/detail.jsp?id=838222527&ttsRouteType=周边游&ad_departure=5aSn6L%2Be&ad_arrive=5ZGo6L655ri4&filterDate=&qssrc=eyJ0cyI6IjE0NjA2OTA0OTcyMDEiLCJzcmMiOiJhbGwuZW52YiIsImFjdCI6ImZpbHRlciJ9&ts=1460690498206_264#route_id=15493072&productId=838222527&vendorid=qb2c_qdcq&DepLastDate=2016-07-14&tf=&searchid=1460690498206_264&arrive=5ZGo6L655ri4&DepDate=2016-04-16&vendor=6Z2S5bKb5Zu96ZmF5peF6KGM56S%2B&djtf=&function=6Lef5Zui5ri4&tm=nzb01_newb&from=&isAds=&departure=5aSn6L%2Be&tp=1460690497837_815"
                 needBook: true
                 preBookTime: "一天"
                 nonChange: true
@@ -731,7 +731,7 @@ paths:
       parameters:
         - name: jsonstring
           in: body
-          description: 地点
+          description: body
           required: true
           schema:
             type: object

@@ -1,0 +1,2281 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "乡味接口文档（商户端）",
+        "contact": {
+            "name": "czm",
+            "email": "chenzm@gaodesoft.com",
+            "url": "http://www.gaodesoft.com"
+        },
+        "description": "## 接口通信约定\n\n### 请求格式\n请求格式如下\n\n```\nhttps://api.xiangwei.com/xxx/xxx.do?jsonstring={key:value, ...}\n```\n### 响应格式\n返回数据格式均为json数据格式, 格式如下：\n```\n{\n    \"code\":0,\n    \"message\":\"...\",\n    \"data\": {\n        ...\n    },\n    \"pagination\": {\n        \"totalCount\": 100,\n        \"totalPages\": 10,\n        \"pageNumber\": 1,\n        \"pageSize\": 10\n    }\n}\n```\n#### code\n200-表示请求成功；\n其他-表示请求失败。\n#### message\n错误消息\n#### data\ndata可能是字符串、字典、数组等等。根据请求不同而有所差异。\n#### pagination\n分页信息，只对分页请求有效。\n"
+    },
+    "host": "192.168.1.125:10011",
+    "basePath": "/",
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "produces": [
+        "application/json",
+        "application/octet-stream"
+    ],
+    "consumes": [
+        "application/json",
+        "application/octet-stream"
+    ],
+    "parameters": {
+        "token": {
+            "name": "token",
+            "in": "header",
+            "description": "登陆请求返回的token",
+            "required": false,
+            "type": "string"
+        }
+    },
+    "tags": [
+        {
+            "name": "文件操作",
+            "description": "文件相关操作，支持图片、语音、视频等文件类型。"
+        },
+        {
+            "name": "授权",
+            "description": "注册、登陆、获取验证码等等。"
+        },
+        {
+            "name": "主题",
+            "description": "产品主题，采摘、垂钓、登山、古镇等等。"
+        },
+        {
+            "name": "商户",
+            "description": "商户信息维护及查询。"
+        },
+        {
+            "name": "旅游产品",
+            "description": "旅游产品信息维护及查询。"
+        },
+        {
+            "name": "城市",
+            "description": "开通城市、开通乡村等等。"
+        }
+    ],
+    "paths": {
+        "/file/upload": {
+            "x-swagger-router-controller": "DefaultController",
+            "parameters": [
+                {
+                    "$ref": "#/parameters/token"
+                }
+            ],
+            "post": {
+                "operationId": "fileUpload",
+                "tags": [
+                    "文件操作"
+                ],
+                "description": "文件上传",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "parameters": [
+                    {
+                        "name": "type",
+                        "in": "formData",
+                        "description": "文件类型 0、图片 1、语音 2、视频 3、其他",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "file",
+                        "in": "formData",
+                        "description": "文件数据",
+                        "required": true,
+                        "type": "file"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "type": "string",
+                                    "description": "图片标识"
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "code": 200,
+                                "data": "100001"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/signup": {
+            "x-swagger-router-controller": "DefaultController",
+            "parameters": [
+                {
+                    "$ref": "#/parameters/token"
+                }
+            ],
+            "post": {
+                "operationId": "authSignup",
+                "tags": [
+                    "授权"
+                ],
+                "description": "注册",
+                "parameters": [
+                    {
+                        "name": "jsonstring",
+                        "in": "body",
+                        "description": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "mobile": {
+                                    "type": "string",
+                                    "description": "手机号"
+                                },
+                                "pwd": {
+                                    "type": "string",
+                                    "description": "密码"
+                                },
+                                "smsCode": {
+                                    "type": "string",
+                                    "description": "验证码"
+                                },
+                                "shopType": {
+                                    "type": "string",
+                                    "description": "店铺类型 1、农户，2、个人导游 3、旅行社"
+                                },
+                                "addr": {
+                                    "$ref": "#/definitions/VillageAddr"
+                                },
+                                "deviceType": {
+                                    "type": "string",
+                                    "description": "设备类型 Android、iOS"
+                                },
+                                "baiduUserId": {
+                                    "type": "string",
+                                    "description": "百度用户id，百度推送用"
+                                },
+                                "channelId": {
+                                    "type": "string",
+                                    "description": "百度channelId，百度推送用"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "$ref": "#/definitions/User"
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "code": 200,
+                                "data": {
+                                    "id": "100",
+                                    "name": "alan",
+                                    "desc": "",
+                                    "type": 1,
+                                    "typeVerification": 1,
+                                    "status": 1,
+                                    "serviceTime": "全天",
+                                    "addr": {
+                                        "province": "辽宁",
+                                        "city": "大连",
+                                        "area": "高新区",
+                                        "town": "敬贤街",
+                                        "village": "桃花源"
+                                    },
+                                    "score": 4.9,
+                                    "tel": "041188888888",
+                                    "mobile": "13888888888",
+                                    "qq": "12345678",
+                                    "weixin": "wx007",
+                                    "avatarUrl": "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3047710011,1274531363&fm=116&gp=0.jpg",
+                                    "signupTime": "2016-04-30T01:20:50.52Z",
+                                    "imageList": [
+                                        "http://img1.qunarzz.com/p/tts0/201405/27/6f81adf5f6dd9ef6c8d65eac.jpg_r_390x260x90_654d594b.jpg",
+                                        "http://img1.qunarzz.com/p/tts3/201405/27/5d4ca9511dd89f0cc8d65eac.jpg_r_390x260x90_a2cd848c.jpg"
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/signin": {
+            "x-swagger-router-controller": "DefaultController",
+            "parameters": [
+                {
+                    "$ref": "#/parameters/token"
+                }
+            ],
+            "post": {
+                "operationId": "authSignin",
+                "tags": [
+                    "授权"
+                ],
+                "description": "登陆",
+                "parameters": [
+                    {
+                        "name": "jsonstring",
+                        "in": "body",
+                        "description": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "mobile": {
+                                    "type": "string",
+                                    "description": "手机号"
+                                },
+                                "pwd": {
+                                    "type": "string",
+                                    "description": "密码 signinType=0时有效"
+                                },
+                                "deviceType": {
+                                    "type": "string",
+                                    "description": "设备类型 Android，iOS"
+                                },
+                                "baiduUserId": {
+                                    "type": "string",
+                                    "description": "百度推送用"
+                                },
+                                "channelId": {
+                                    "type": "string",
+                                    "description": "百度channelId，百度推送用"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "$ref": "#/definitions/User"
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "code": 200,
+                                "data": {
+                                    "id": "100",
+                                    "name": "alan",
+                                    "desc": "",
+                                    "type": 1,
+                                    "typeVerification": 1,
+                                    "status": 1,
+                                    "serviceTime": "全天",
+                                    "addr": {
+                                        "province": "辽宁",
+                                        "city": "大连",
+                                        "area": "高新区",
+                                        "town": "敬贤街",
+                                        "village": "桃花源"
+                                    },
+                                    "score": 4.9,
+                                    "tel": "041188888888",
+                                    "mobile": "13888888888",
+                                    "qq": "12345678",
+                                    "weixin": "wx007",
+                                    "avatarUrl": "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3047710011,1274531363&fm=116&gp=0.jpg",
+                                    "signupTime": "2016-04-30T01:20:50.52Z",
+                                    "imageList": [
+                                        "http://img1.qunarzz.com/p/tts0/201405/27/6f81adf5f6dd9ef6c8d65eac.jpg_r_390x260x90_654d594b.jpg",
+                                        "http://img1.qunarzz.com/p/tts3/201405/27/5d4ca9511dd89f0cc8d65eac.jpg_r_390x260x90_a2cd848c.jpg"
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/sendVCode": {
+            "x-swagger-router-controller": "DefaultController",
+            "parameters": [
+                {
+                    "$ref": "#/parameters/token"
+                }
+            ],
+            "post": {
+                "operationId": "authSendVCode",
+                "tags": [
+                    "授权"
+                ],
+                "description": "发送验证码",
+                "parameters": [
+                    {
+                        "name": "jsonstring",
+                        "in": "body",
+                        "description": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "mobile": {
+                                    "type": "string",
+                                    "description": "手机号"
+                                },
+                                "type": {
+                                    "type": "integer",
+                                    "description": "验证码类型 1、登陆 2、找回登陆密码"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "type": "boolean"
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "code": 200,
+                                "data": true
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/signout": {
+            "x-swagger-router-controller": "DefaultController",
+            "parameters": [
+                {
+                    "$ref": "#/parameters/token"
+                }
+            ],
+            "post": {
+                "operationId": "authSignout",
+                "tags": [
+                    "授权"
+                ],
+                "description": "退出登陆",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "type": "boolean"
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "code": 200,
+                                "data": true
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/supplementInfo": {
+            "x-swagger-router-controller": "DefaultController",
+            "parameters": [
+                {
+                    "$ref": "#/parameters/token"
+                }
+            ],
+            "post": {
+                "operationId": "authSupplementInfo",
+                "tags": [
+                    "授权"
+                ],
+                "description": "补充登陆信息（推送需要）",
+                "parameters": [
+                    {
+                        "name": "jsonstring",
+                        "in": "body",
+                        "description": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "baiduUserId": {
+                                    "type": "string",
+                                    "description": "百度推送用"
+                                },
+                                "channelId": {
+                                    "type": "string",
+                                    "description": "百度channelId，百度推送用"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "type": "boolean"
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "code": 200,
+                                "data": true
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tag/list": {
+            "x-swagger-router-controller": "DefaultController",
+            "parameters": [
+                {
+                    "$ref": "#/parameters/token"
+                }
+            ],
+            "get": {
+                "operationId": "tagList",
+                "tags": [
+                    "主题"
+                ],
+                "description": "主题列表",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string",
+                                        "description": "主题"
+                                    }
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "code": 200,
+                                "data": [
+                                    "采摘",
+                                    "登山",
+                                    "观光",
+                                    "古镇",
+                                    "亲子",
+                                    "体验"
+                                ]
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user/pwdSetting": {
+            "x-swagger-router-controller": "DefaultController",
+            "parameters": [
+                {
+                    "$ref": "#/parameters/token"
+                }
+            ],
+            "post": {
+                "operationId": "userPwdSetting",
+                "tags": [
+                    "商户"
+                ],
+                "description": "密码设置",
+                "parameters": [
+                    {
+                        "name": "jsonstring",
+                        "in": "body",
+                        "description": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "mobile": {
+                                    "type": "string",
+                                    "description": "手机号"
+                                },
+                                "pwd": {
+                                    "type": "string",
+                                    "description": "密码"
+                                },
+                                "smsCode": {
+                                    "type": "string",
+                                    "description": "验证码"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "type": "boolean"
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "code": 200,
+                                "data": true
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user/realnameCertificate": {
+            "x-swagger-router-controller": "DefaultController",
+            "parameters": [
+                {
+                    "$ref": "#/parameters/token"
+                }
+            ],
+            "post": {
+                "operationId": "userRealnameCertificate",
+                "tags": [
+                    "商户"
+                ],
+                "description": "实名认证",
+                "parameters": [
+                    {
+                        "name": "jsonstring",
+                        "in": "body",
+                        "description": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "realname": {
+                                    "type": "string",
+                                    "description": "真实姓名"
+                                },
+                                "IDNo": {
+                                    "type": "string",
+                                    "description": "身份证号"
+                                },
+                                "fileId": {
+                                    "type": "string",
+                                    "description": "身份证图片文件id，通过file/upload上传返回后的id"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "type": "boolean",
+                                    "description": "是否成功"
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "code": 200,
+                                "data": true
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user/individualCertificate": {
+            "x-swagger-router-controller": "DefaultController",
+            "parameters": [
+                {
+                    "$ref": "#/parameters/token"
+                }
+            ],
+            "post": {
+                "operationId": "userIndividualCertificate",
+                "tags": [
+                    "商户"
+                ],
+                "description": "个体户认证",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "parameters": [
+                    {
+                        "name": "licenseImage",
+                        "in": "formData",
+                        "description": "营业执照照片",
+                        "required": true,
+                        "type": "file"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "type": "boolean",
+                                    "description": "是否成功"
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "code": 200,
+                                "data": true
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user/companyCertificate": {
+            "x-swagger-router-controller": "DefaultController",
+            "parameters": [
+                {
+                    "$ref": "#/parameters/token"
+                }
+            ],
+            "post": {
+                "operationId": "userCompanyCertificate",
+                "tags": [
+                    "商户"
+                ],
+                "description": "企业认证",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "parameters": [
+                    {
+                        "name": "jsonstring",
+                        "in": "body",
+                        "description": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "description": "企业名称"
+                                },
+                                "legalPerson": {
+                                    "type": "string",
+                                    "description": "企业法人"
+                                },
+                                "fileId": {
+                                    "type": "string",
+                                    "description": "营业执照图片文件id，通过file/upload上传返回后的id"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "type": "boolean",
+                                    "description": "是否成功"
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "code": 200,
+                                "data": true
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user/contactSetting": {
+            "x-swagger-router-controller": "DefaultController",
+            "parameters": [
+                {
+                    "$ref": "#/parameters/token"
+                }
+            ],
+            "post": {
+                "operationId": "userContactSetting",
+                "tags": [
+                    "商户"
+                ],
+                "description": "联系方式设置",
+                "parameters": [
+                    {
+                        "name": "jsonstring",
+                        "in": "body",
+                        "description": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "tel": {
+                                    "type": "string",
+                                    "description": "联系电话，值不为null时才会修改"
+                                },
+                                "qq": {
+                                    "type": "string",
+                                    "description": "qq号，值不为null时才会修改"
+                                },
+                                "weixin": {
+                                    "type": "string",
+                                    "description": "微信号，值不为null时才会修改"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "type": "boolean",
+                                    "description": "是否成功"
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "code": 200,
+                                "data": true
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user/avatarUpload": {
+            "x-swagger-router-controller": "DefaultController",
+            "parameters": [
+                {
+                    "$ref": "#/parameters/token"
+                }
+            ],
+            "post": {
+                "operationId": "userAvatarUpload",
+                "tags": [
+                    "商户"
+                ],
+                "description": "店铺头像上传",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "parameters": [
+                    {
+                        "name": "file",
+                        "in": "formData",
+                        "description": "店铺头像数据",
+                        "required": true,
+                        "type": "file"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "type": "boolean",
+                                    "description": "是否成功"
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "code": 200,
+                                "data": true
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user/shopImagesSave": {
+            "x-swagger-router-controller": "DefaultController",
+            "parameters": [
+                {
+                    "$ref": "#/parameters/token"
+                }
+            ],
+            "post": {
+                "operationId": "userShopImagesSave",
+                "tags": [
+                    "商户"
+                ],
+                "description": "店铺图片保存，该接口依赖文件上传接口，文件上传成功后使用返回的图片标识作为该接口的请求参数",
+                "parameters": [
+                    {
+                        "name": "jsonstring",
+                        "in": "body",
+                        "description": "地点",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "imageIds": {
+                                    "type": "array",
+                                    "description": "图片标识数组",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "type": "boolean",
+                                    "description": "是否成功"
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "code": 200,
+                                "data": true
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user/baseSetting": {
+            "x-swagger-router-controller": "DefaultController",
+            "parameters": [
+                {
+                    "$ref": "#/parameters/token"
+                }
+            ],
+            "post": {
+                "operationId": "userBaseSetting",
+                "tags": [
+                    "商户"
+                ],
+                "description": "商铺基本信息设置， 店铺名、店铺描述、店铺地址、客服时间等设置",
+                "parameters": [
+                    {
+                        "name": "jsonstring",
+                        "in": "body",
+                        "description": "地点",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "shopName": {
+                                    "type": "string",
+                                    "description": "名称，值不为null时才会修改"
+                                },
+                                "desc": {
+                                    "type": "string",
+                                    "description": "描述，值不为null时才会修改"
+                                },
+                                "addr": {
+                                    "$ref": "#/definitions/VillageAddr"
+                                },
+                                "serviceTime": {
+                                    "type": "string",
+                                    "description": "服务时间， e.g. 全天、周一至周五、早9:00至晚21：00等等，值不为null时才会修改"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "type": "boolean",
+                                    "description": "是否成功"
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "code": 200,
+                                "data": true
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tourismProduct/list": {
+            "x-swagger-router-controller": "DefaultController",
+            "parameters": [
+                {
+                    "$ref": "#/parameters/token"
+                }
+            ],
+            "post": {
+                "operationId": "tourismList",
+                "tags": [
+                    "旅游产品"
+                ],
+                "description": "产品列表（分页）",
+                "parameters": [
+                    {
+                        "name": "jsonstring",
+                        "in": "body",
+                        "description": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "pageSize": {
+                                    "type": "integer",
+                                    "description": "每页条数"
+                                },
+                                "pageNumber": {
+                                    "type": "integer",
+                                    "description": "请求的页码"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "pagination": {
+                                    "$ref": "#/definitions/Pagination"
+                                },
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/TourismProduct"
+                                    }
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "code": 200,
+                                "pagination": {
+                                    "pageNumber": 1,
+                                    "totalPage": 10,
+                                    "pageSize": 10,
+                                    "totalCount": 100
+                                },
+                                "data": [
+                                    {
+                                        "id": "1001",
+                                        "shopId": "1000",
+                                        "name": "大连威海蓬莱两晚三天游",
+                                        "desc": "大连，蓬莱威海超值3日游，含大连到烟台三等B船票",
+                                        "tags": [
+                                            "观光"
+                                        ],
+                                        "price": 10,
+                                        "salesPrice": 10,
+                                        "addr": {
+                                            "province": "辽宁",
+                                            "city": "大连",
+                                            "area": "高新区",
+                                            "town": "敬贤街",
+                                            "village": "桃花源"
+                                        },
+                                        "startDate": "2016-04-14T01:20:50.52Z",
+                                        "endDate": "2016-04-30T01:20:50.52Z",
+                                        "imageList": [
+                                            "http://img1.qunarzz.com/p/tts0/201405/27/6f81adf5f6dd9ef6c8d65eac.jpg_r_390x260x90_654d594b.jpg",
+                                            "http://img1.qunarzz.com/p/tts3/201405/27/5d4ca9511dd89f0cc8d65eac.jpg_r_390x260x90_a2cd848c.jpg"
+                                        ],
+                                        "detailUrl": "http://qdcq3.package.qunar.com/user/detail.jsp?id=838222527&ttsRouteType=周边游&ad_departure=5aSn6L%2Be&ad_arrive=5ZGo6L655ri4&filterDate=&qssrc=eyJ0cyI6IjE0NjA2OTA0OTcyMDEiLCJzcmMiOiJhbGwuZW52YiIsImFjdCI6ImZpbHRlciJ9&ts=1460690498206_264#route_id=15493072&productId=838222527&vendorid=qb2c_qdcq&DepLastDate=2016-07-14&tf=&searchid=1460690498206_264&arrive=5ZGo6L655ri4&DepDate=2016-04-16&vendor=6Z2S5bKb5Zu96ZmF5peF6KGM56S%2B&djtf=&function=6Lef5Zui5ri4&tm=nzb01_newb&from=&isAds=&departure=5aSn6L%2Be&tp=1460690497837_815",
+                                        "needBook": true,
+                                        "preBookTime": "一天",
+                                        "nonChange": true,
+                                        "nonRefundable": true
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tourismProduct/info": {
+            "x-swagger-router-controller": "DefaultController",
+            "parameters": [
+                {
+                    "$ref": "#/parameters/token"
+                }
+            ],
+            "post": {
+                "operationId": "tourismInfo",
+                "tags": [
+                    "旅游产品"
+                ],
+                "description": "产品详细",
+                "parameters": [
+                    {
+                        "name": "jsonstring",
+                        "in": "body",
+                        "description": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "productId": {
+                                    "type": "string",
+                                    "description": "产品标识"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "$ref": "#/definitions/TourismProduct"
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "code": 200,
+                                "data": {
+                                    "id": "1001",
+                                    "shopId": "1000",
+                                    "name": "大连威海蓬莱两晚三天游",
+                                    "desc": "大连，蓬莱威海超值3日游，含大连到烟台三等B船票",
+                                    "tags": [
+                                        "观光"
+                                    ],
+                                    "price": 10,
+                                    "salesPrice": 10,
+                                    "addr": {
+                                        "province": "辽宁",
+                                        "city": "大连",
+                                        "area": "高新区",
+                                        "town": "敬贤街",
+                                        "village": "桃花源"
+                                    },
+                                    "startDate": "2016-04-14T01:20:50.52Z",
+                                    "endDate": "2016-04-30T01:20:50.52Z",
+                                    "imageList": [
+                                        "http://img1.qunarzz.com/p/tts0/201405/27/6f81adf5f6dd9ef6c8d65eac.jpg_r_390x260x90_654d594b.jpg",
+                                        "http://img1.qunarzz.com/p/tts3/201405/27/5d4ca9511dd89f0cc8d65eac.jpg_r_390x260x90_a2cd848c.jpg"
+                                    ],
+                                    "detailUrl": "http://qdcq3.package.qunar.com/user/detail.jsp?id=838222527&ttsRouteType=周边游&ad_departure=5aSn6L%2Be&ad_arrive=5ZGo6L655ri4&filterDate=&qssrc=eyJ0cyI6IjE0NjA2OTA0OTcyMDEiLCJzcmMiOiJhbGwuZW52YiIsImFjdCI6ImZpbHRlciJ9&ts=1460690498206_264#route_id=15493072&productId=838222527&vendorid=qb2c_qdcq&DepLastDate=2016-07-14&tf=&searchid=1460690498206_264&arrive=5ZGo6L655ri4&DepDate=2016-04-16&vendor=6Z2S5bKb5Zu96ZmF5peF6KGM56S%2B&djtf=&function=6Lef5Zui5ri4&tm=nzb01_newb&from=&isAds=&departure=5aSn6L%2Be&tp=1460690497837_815",
+                                    "needBook": true,
+                                    "preBookTime": "一天",
+                                    "nonChange": true,
+                                    "nonRefundable": true
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tourismProduct/baseSave": {
+            "x-swagger-router-controller": "DefaultController",
+            "parameters": [
+                {
+                    "$ref": "#/parameters/token"
+                }
+            ],
+            "post": {
+                "operationId": "tourismBaseSave",
+                "tags": [
+                    "旅游产品"
+                ],
+                "description": "产品基本信息保存",
+                "parameters": [
+                    {
+                        "name": "jsonstring",
+                        "in": "body",
+                        "description": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "productId": {
+                                    "type": "string",
+                                    "description": "产品标识， 为空时则为新建产品"
+                                },
+                                "name": {
+                                    "type": "string",
+                                    "description": "产品名"
+                                },
+                                "desc": {
+                                    "type": "string",
+                                    "description": "产品描述"
+                                },
+                                "tags": {
+                                    "type": "array",
+                                    "description": "产品标签",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "price": {
+                                    "type": "number",
+                                    "description": "价格"
+                                },
+                                "salsPrice": {
+                                    "type": "number",
+                                    "description": "促销价"
+                                },
+                                "autoConfirm": {
+                                    "type": "boolean",
+                                    "description": "是否自动确认"
+                                },
+                                "needBook": {
+                                    "type": "boolean",
+                                    "description": "是否需要预定"
+                                },
+                                "preBookTime": {
+                                    "type": "string",
+                                    "description": "预定提前时间"
+                                },
+                                "nonRefundable": {
+                                    "type": "boolean",
+                                    "description": "true:不可退 false:可退"
+                                },
+                                "nonChange": {
+                                    "type": "string",
+                                    "description": "true:不可改 false:可改"
+                                },
+                                "startDate": {
+                                    "type": "string",
+                                    "description": "产品有效时间-开始时间"
+                                },
+                                "endDate": {
+                                    "type": "string",
+                                    "description": "产品有效时间-结束时间"
+                                },
+                                "addr": {
+                                    "$ref": "#/definitions/VillageAddr"
+                                },
+                                "imageIds": {
+                                    "type": "array",
+                                    "description": "图片标识数组, 产品原有的imageId或者使用file/upload上传反回的imageId",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "type": "string",
+                                    "description": "产品标识"
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "code": 200,
+                                "data": "100"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tourismProduct/imageTextDetailSave": {
+            "x-swagger-router-controller": "DefaultController",
+            "parameters": [
+                {
+                    "$ref": "#/parameters/token"
+                }
+            ],
+            "post": {
+                "operationId": "tourismImageTextDetailSave",
+                "tags": [
+                    "旅游产品"
+                ],
+                "description": "图文详细信息保存，该接口依赖文件上传接口",
+                "parameters": [
+                    {
+                        "name": "jsonstring",
+                        "in": "body",
+                        "description": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "productId": {
+                                    "type": "string",
+                                    "description": "产品标识"
+                                },
+                                "detailId": {
+                                    "type": "string",
+                                    "description": "图文详细标识， 为null时表示添加，不为null时表示修改"
+                                },
+                                "text": {
+                                    "type": "string",
+                                    "description": "图片说明"
+                                },
+                                "imageIds": {
+                                    "type": "array",
+                                    "description": "图片标识数组, 原有的imageId或者使用file/upload上传反回的imageId",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "type": "string",
+                                    "description": "标识"
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "code": 200,
+                                "data": "100"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tourismProduct/imageTextDetailDelete": {
+            "x-swagger-router-controller": "DefaultController",
+            "parameters": [
+                {
+                    "$ref": "#/parameters/token"
+                }
+            ],
+            "post": {
+                "operationId": "tourismImageTextDetailDelete",
+                "tags": [
+                    "旅游产品"
+                ],
+                "description": "图文详细信息删除",
+                "parameters": [
+                    {
+                        "name": "jsonstring",
+                        "in": "body",
+                        "description": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "productId": {
+                                    "type": "string",
+                                    "description": "产品标识"
+                                },
+                                "detailId": {
+                                    "type": "string",
+                                    "description": "图文详细标识"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "type": "boolean",
+                                    "description": "是否成功"
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "code": 200,
+                                "data": true
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tourismProduct/itemSave": {
+            "x-swagger-router-controller": "DefaultController",
+            "parameters": [
+                {
+                    "$ref": "#/parameters/token"
+                }
+            ],
+            "post": {
+                "operationId": "tourismItemSave",
+                "tags": [
+                    "旅游产品"
+                ],
+                "description": "产品事项保存，该接口依赖文件上传接口",
+                "parameters": [
+                    {
+                        "name": "jsonstring",
+                        "in": "body",
+                        "description": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "productId": {
+                                    "type": "string",
+                                    "description": "产品标识"
+                                },
+                                "type": {
+                                    "type": "integer",
+                                    "description": "事项类型 1、行程安排 2、购买提示 3、费用说明"
+                                },
+                                "text": {
+                                    "type": "string",
+                                    "description": "文字说明"
+                                },
+                                "imageIds": {
+                                    "type": "array",
+                                    "description": "图片标识数组, 原有的imageId或者使用file/upload上传反回的imageId",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "type": "string",
+                                    "description": "标识"
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "code": 200,
+                                "data": "100"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tourismProduct/publish": {
+            "x-swagger-router-controller": "DefaultController",
+            "parameters": [
+                {
+                    "$ref": "#/parameters/token"
+                }
+            ],
+            "post": {
+                "operationId": "tourismPublish",
+                "tags": [
+                    "旅游产品"
+                ],
+                "description": "发布",
+                "parameters": [
+                    {
+                        "name": "jsonstring",
+                        "in": "body",
+                        "description": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "productId": {
+                                    "type": "string",
+                                    "description": "产品标识"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "type": "boolean",
+                                    "description": "是否成功"
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "code": 200,
+                                "data": true
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tourismProduct/soldOut": {
+            "x-swagger-router-controller": "DefaultController",
+            "parameters": [
+                {
+                    "$ref": "#/parameters/token"
+                }
+            ],
+            "post": {
+                "operationId": "tourismSoldOut",
+                "tags": [
+                    "旅游产品"
+                ],
+                "description": "下架",
+                "parameters": [
+                    {
+                        "name": "jsonstring",
+                        "in": "body",
+                        "description": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "productId": {
+                                    "type": "string",
+                                    "description": "产品标识"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "type": "boolean",
+                                    "description": "是否成功"
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "code": 200,
+                                "data": true
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tourismProduct/recomentApply": {
+            "x-swagger-router-controller": "DefaultController",
+            "parameters": [
+                {
+                    "$ref": "#/parameters/token"
+                }
+            ],
+            "post": {
+                "operationId": "tourismRecomentApply",
+                "tags": [
+                    "旅游产品"
+                ],
+                "description": "申请推荐",
+                "parameters": [
+                    {
+                        "name": "jsonstring",
+                        "in": "body",
+                        "description": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "productId": {
+                                    "type": "string",
+                                    "description": "产品标识"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "type": "boolean",
+                                    "description": "是否成功"
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "code": 200,
+                                "data": true
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tourismProduct/commentList": {
+            "x-swagger-router-controller": "DefaultController",
+            "parameters": [
+                {
+                    "$ref": "#/parameters/token"
+                }
+            ],
+            "get": {
+                "operationId": "tourismProductCommentList",
+                "tags": [
+                    "旅游产品"
+                ],
+                "description": "产品评价列表（分页）",
+                "parameters": [
+                    {
+                        "name": "jsonstring",
+                        "in": "body",
+                        "description": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "productId": {
+                                    "type": "string",
+                                    "description": "产品标识"
+                                },
+                                "pageSize": {
+                                    "type": "integer",
+                                    "description": "每页条数"
+                                },
+                                "pageNumber": {
+                                    "type": "integer",
+                                    "description": "请求的页码"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "pagination": {
+                                    "$ref": "#/definitions/Pagination"
+                                },
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/Comment"
+                                    }
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "code": 200,
+                                "pagination": {
+                                    "pageNumber": 1,
+                                    "totalPage": 10,
+                                    "pageSize": 10,
+                                    "totalCount": 100
+                                },
+                                "data": [
+                                    {
+                                        "id": "10",
+                                        "userId": "10",
+                                        "shopId": "10",
+                                        "nickname": "angelababy",
+                                        "avataUrl": "https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=2484006459,1801900327&fm=58",
+                                        "content": "很好玩",
+                                        "score": 5,
+                                        "time": "2016-04-14T01:20:50.52Z",
+                                        "imageList": [
+                                            "http://img1.qunarzz.com/p/tts0/201405/27/6f81adf5f6dd9ef6c8d65eac.jpg_r_390x260x90_654d594b.jpg",
+                                            "httphttp://img1.qunarzz.com/p/tts3/201405/27/5d4ca9511dd89f0cc8d65eac.jpg_r_390x260x90_a2cd848c.jpg"
+                                        ]
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/city/openCityList": {
+            "x-swagger-router-controller": "DefaultController",
+            "parameters": [
+                {
+                    "$ref": "#/parameters/token"
+                }
+            ],
+            "get": {
+                "operationId": "cityOpenCityListList",
+                "tags": [
+                    "城市"
+                ],
+                "description": "已开通城市列表",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "code": 200,
+                                "data": [
+                                    "大连",
+                                    "沈阳"
+                                ]
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/city/openVillageList": {
+            "x-swagger-router-controller": "DefaultController",
+            "parameters": [
+                {
+                    "$ref": "#/parameters/token"
+                }
+            ],
+            "get": {
+                "operationId": "cityOpenVillageList",
+                "tags": [
+                    "城市"
+                ],
+                "description": "已开通乡村列表",
+                "parameters": [
+                    {
+                        "name": "jsonstring",
+                        "in": "body",
+                        "description": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "city": {
+                                    "type": "string",
+                                    "description": "城市"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/VillageAddr"
+                                    }
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "code": 200,
+                                "data": [
+                                    {
+                                        "addr": null,
+                                        "province": "辽宁",
+                                        "city": "大连",
+                                        "area": "高新区",
+                                        "town": "敬贤街",
+                                        "village": "桃花源"
+                                    },
+                                    {
+                                        "addr": null,
+                                        "province": "辽宁",
+                                        "city": "大连",
+                                        "area": "金州区",
+                                        "town": "xx街",
+                                        "village": "xx村"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "Pagination": {
+            "type": "object",
+            "description": "分页",
+            "properties": {
+                "totalCount": {
+                    "type": "integer",
+                    "description": "总条数",
+                    "format": "int32"
+                },
+                "totalPage": {
+                    "type": "integer",
+                    "description": "总页数",
+                    "format": "int32"
+                },
+                "pageNumber": {
+                    "type": "integer",
+                    "description": "当前页数",
+                    "format": "int32"
+                },
+                "pageSize": {
+                    "type": "integer",
+                    "description": "页大小",
+                    "format": "int32"
+                }
+            }
+        },
+        "User": {
+            "type": "object",
+            "description": "商户",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "description": "用户标识"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "店铺名"
+                },
+                "desc": {
+                    "type": "string",
+                    "description": "店铺描述"
+                },
+                "type": {
+                    "type": "integer",
+                    "description": "店铺类型 1、农户，2、个人导游 3、旅行社",
+                    "format": "int32"
+                },
+                "typeVerification": {
+                    "type": "integer",
+                    "description": "店铺类型认证 0、未认证 1、认证",
+                    "format": "int32"
+                },
+                "status": {
+                    "type": "integer",
+                    "description": "店铺状态， 0、未审核 1、正常 2、被禁用",
+                    "format": "int32"
+                },
+                "serviceTime": {
+                    "type": "string",
+                    "description": "服务时间"
+                },
+                "addr": {
+                    "$ref": "#/definitions/VillageAddr"
+                },
+                "score": {
+                    "type": "number",
+                    "description": "店铺评分"
+                },
+                "tel": {
+                    "type": "string",
+                    "description": "联系电话"
+                },
+                "mobile": {
+                    "type": "string",
+                    "description": "联系手机号"
+                },
+                "qq": {
+                    "type": "string",
+                    "description": "QQ"
+                },
+                "weixin": {
+                    "type": "string",
+                    "description": "微信"
+                },
+                "avatarUrl": {
+                    "type": "string",
+                    "description": "店铺头像"
+                },
+                "signupTime": {
+                    "type": "string",
+                    "description": "注册时间",
+                    "format": "date-time"
+                },
+                "imageList": {
+                    "type": "array",
+                    "description": "产品图片列表（id列表，图片url根据文件服务器路径+商户id+图片id用固定的规则组装）",
+                    "items": {
+                        "type": "string",
+                        "description": "图片id"
+                    }
+                },
+                "shopCertification": {
+                    "$ref": "#/definitions/ShopCertification"
+                },
+                "tourismList": {
+                    "type": "array",
+                    "description": "店铺产品列表",
+                    "items": {
+                        "$ref": "#/definitions/TourismProduct"
+                    }
+                }
+            }
+        },
+        "TourismProduct": {
+            "type": "object",
+            "description": "旅游产品",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "description": "产品标识"
+                },
+                "shopId": {
+                    "type": "string",
+                    "description": "商铺标识"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "名称"
+                },
+                "desc": {
+                    "type": "string",
+                    "description": "描述"
+                },
+                "tags": {
+                    "type": "array",
+                    "description": "标签",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "status": {
+                    "type": "integer",
+                    "description": "状态 0、待发布 1、待审核 2、审核通过 3、审核不通过 4、发布 5、下架",
+                    "format": "int32"
+                },
+                "price": {
+                    "type": "number",
+                    "description": "市场价格"
+                },
+                "salesPrice": {
+                    "type": "number",
+                    "description": "促销价格"
+                },
+                "addr": {
+                    "$ref": "#/definitions/VillageAddr"
+                },
+                "startDate": {
+                    "type": "string",
+                    "description": "开始时间",
+                    "format": "date-time"
+                },
+                "endDate": {
+                    "type": "string",
+                    "description": "结束时间",
+                    "format": "date-time"
+                },
+                "imageList": {
+                    "type": "array",
+                    "description": "产品图片列表（id列表，图片url根据文件服务器路径+图片id用固定的规则组装）",
+                    "items": {
+                        "type": "string",
+                        "description": "图片id"
+                    }
+                },
+                "collectCount": {
+                    "type": "integer",
+                    "description": "收藏次数",
+                    "format": "int32"
+                },
+                "detailUrl": {
+                    "type": "string",
+                    "description": "详情页url"
+                },
+                "imageAndTextList": {
+                    "type": "array",
+                    "description": "图文说明",
+                    "items": {
+                        "$ref": "#/definitions/TourismProductImageText"
+                    }
+                },
+                "items": {
+                    "$ref": "#/definitions/TourismProductItems"
+                },
+                "needBook": {
+                    "type": "boolean",
+                    "description": "是否需要预定"
+                },
+                "preBookTime": {
+                    "type": "string",
+                    "description": "预定提前时间"
+                },
+                "nonChange": {
+                    "type": "boolean",
+                    "description": "true:不可改 false:可改"
+                },
+                "nonRefundable": {
+                    "type": "boolean",
+                    "description": "true:不可退 false:可退"
+                },
+                "recomment": {
+                    "$ref": "#/definitions/TourismProductRecomment"
+                }
+            }
+        },
+        "ShopCertification": {
+            "type": "object",
+            "description": "店铺认证",
+            "properties": {
+                "shopId": {
+                    "type": "string",
+                    "description": "店铺标识"
+                },
+                "realName": {
+                    "type": "string",
+                    "description": "店主真实姓名"
+                },
+                "IDNo": {
+                    "type": "string",
+                    "description": "店主身份证号"
+                },
+                "IDImage": {
+                    "type": "string",
+                    "description": "店主身份证图片"
+                },
+                "legalPerson": {
+                    "type": "string",
+                    "description": "法人代表"
+                },
+                "companyName": {
+                    "type": "string",
+                    "description": "企业名称"
+                },
+                "licenseNo": {
+                    "type": "string",
+                    "description": "许可证编号"
+                },
+                "licenseImageUrl": {
+                    "type": "string",
+                    "description": "执照照片地址，个人营业执照、企业营业执照或导游证照片"
+                }
+            }
+        },
+        "TourismProductRecomment": {
+            "type": "object",
+            "description": "旅游产品推荐",
+            "properties": {
+                "productId": {
+                    "type": "string",
+                    "description": "产品标识"
+                },
+                "slogan": {
+                    "type": "string",
+                    "description": "推荐宣传语"
+                },
+                "deadline": {
+                    "type": "string",
+                    "description": "推荐截止日期",
+                    "format": "date-time"
+                },
+                "index": {
+                    "type": "integer",
+                    "description": "推荐排序",
+                    "format": "int32"
+                }
+            }
+        },
+        "TourismProductImageText": {
+            "type": "object",
+            "description": "旅游产品图文说明",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "description": "标识"
+                },
+                "imageUrl": {
+                    "type": "string",
+                    "description": "图片地址"
+                },
+                "desc": {
+                    "type": "string",
+                    "description": "图片说明"
+                },
+                "sort": {
+                    "type": "integer",
+                    "description": "排序",
+                    "format": "int32"
+                }
+            }
+        },
+        "TourismProductItems": {
+            "type": "object",
+            "description": "旅游产品事项",
+            "properties": {
+                "productId": {
+                    "type": "string",
+                    "description": "产品标识"
+                },
+                "schedule": {
+                    "type": "string",
+                    "description": "行程安排"
+                },
+                "point": {
+                    "type": "string",
+                    "description": "产品亮点"
+                },
+                "guide": {
+                    "type": "string",
+                    "description": "购买须知"
+                },
+                "feeDesc": {
+                    "type": "string",
+                    "description": "费用说明"
+                },
+                "otherDesc": {
+                    "type": "string",
+                    "description": "其他说明"
+                }
+            }
+        },
+        "VillageAddr": {
+            "type": "object",
+            "description": "乡村地址",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "description": "标识"
+                },
+                "province": {
+                    "type": "string",
+                    "description": "地点-省"
+                },
+                "city": {
+                    "type": "string",
+                    "description": "地点-市"
+                },
+                "area": {
+                    "type": "string",
+                    "description": "地点-区"
+                },
+                "town": {
+                    "type": "string",
+                    "description": "地点-乡/镇"
+                },
+                "village": {
+                    "type": "string",
+                    "description": "地点-村"
+                }
+            }
+        },
+        "Comment": {
+            "type": "object",
+            "description": "评论",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "description": "评论标识"
+                },
+                "userId": {
+                    "type": "string",
+                    "description": "评论者标识"
+                },
+                "shopId": {
+                    "type": "string",
+                    "description": "店铺标识"
+                },
+                "productId": {
+                    "type": "string",
+                    "description": "产品标识"
+                },
+                "nickname": {
+                    "type": "string",
+                    "description": "评论者昵称"
+                },
+                "avataUrl": {
+                    "type": "string",
+                    "description": "评论者头像地址"
+                },
+                "mobile": {
+                    "type": "string",
+                    "description": "评论者手机号"
+                },
+                "content": {
+                    "type": "string",
+                    "description": "内容"
+                },
+                "score": {
+                    "type": "number",
+                    "description": "评分",
+                    "format": "int32"
+                },
+                "time": {
+                    "type": "string",
+                    "description": "评论时间",
+                    "format": "date-time"
+                },
+                "imageUrlList": {
+                    "type": "array",
+                    "description": "评论图片",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    }
+}

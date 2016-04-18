@@ -49,6 +49,7 @@ info:
 ################################################################################
 #                  Host, Base Path, Schemes and Content Types                  #
 ################################################################################
+host: 192.168.1.125:10011
 basePath: /
 schemes:
   - http
@@ -191,6 +192,29 @@ paths:
             application/json:
               code: 200
               data:
+                id: "100"
+                name: "alan"
+                desc: ""
+                type: 1
+                typeVerification: 1
+                status: 1
+                serviceTime: "全天"
+                addr:
+                  province: "辽宁"
+                  city: "大连"
+                  area: "高新区"
+                  town: "敬贤街"
+                  village: "桃花源"
+                score: 4.9
+                tel: "041188888888"
+                mobile: "13888888888"
+                qq: "12345678"
+                weixin: "wx007"
+                avatarUrl: "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3047710011,1274531363&fm=116&gp=0.jpg"
+                signupTime: "2016-04-30T01:20:50.52Z"
+                imageList:
+                  - "http://img1.qunarzz.com/p/tts0/201405/27/6f81adf5f6dd9ef6c8d65eac.jpg_r_390x260x90_654d594b.jpg"
+                  - "http://img1.qunarzz.com/p/tts3/201405/27/5d4ca9511dd89f0cc8d65eac.jpg_r_390x260x90_a2cd848c.jpg"
 
   /auth/signin:
     x-swagger-router-controller: DefaultController
@@ -239,6 +263,29 @@ paths:
             application/json:
               code: 200
               data:
+                id: "100"
+                name: "alan"
+                desc: ""
+                type: 1
+                typeVerification: 1
+                status: 1
+                serviceTime: "全天"
+                addr:
+                  province: "辽宁"
+                  city: "大连"
+                  area: "高新区"
+                  town: "敬贤街"
+                  village: "桃花源"
+                score: 4.9
+                tel: "041188888888"
+                mobile: "13888888888"
+                qq: "12345678"
+                weixin: "wx007"
+                avatarUrl: "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3047710011,1274531363&fm=116&gp=0.jpg"
+                signupTime: "2016-04-30T01:20:50.52Z"
+                imageList:
+                  - "http://img1.qunarzz.com/p/tts0/201405/27/6f81adf5f6dd9ef6c8d65eac.jpg_r_390x260x90_654d594b.jpg"
+                  - "http://img1.qunarzz.com/p/tts3/201405/27/5d4ca9511dd89f0cc8d65eac.jpg_r_390x260x90_a2cd848c.jpg"
 
   /auth/sendVCode:
     x-swagger-router-controller: DefaultController
@@ -1294,6 +1341,24 @@ paths:
                 type: array
                 items:
                   $ref: '#/definitions/VillageAddr'
+          examples:
+            application/json:
+              code: 200
+              data:
+                - addr:
+                  province: "辽宁"
+                  city: "大连"
+                  area: "高新区"
+                  town: "敬贤街"
+                  village: "桃花源"
+                - addr:
+                  province: "辽宁"
+                  city: "大连"
+                  area: "金州区"
+                  town: "xx街"
+                  village: "xx村"
+
+
 
 ################################################################################
 #                                 数据模型                                     #
@@ -1371,7 +1436,7 @@ definitions:
       signupTime:
         type: string
         description: 注册时间
-        format: date
+        format: date-time
       imageList:
         type: array
         description: 产品图片列表（id列表，图片url根据文件服务器路径+商户id+图片id用固定的规则组装）
@@ -1422,11 +1487,11 @@ definitions:
       startDate:
         type: string
         description: 开始时间
-        format: date
+        format: date-time
       endDate:
         type: string
         description: 结束时间
-        format: date
+        format: date-time
       imageList:
         type: array
         description: 产品图片列表（id列表，图片url根据文件服务器路径+图片id用固定的规则组装）
@@ -1504,7 +1569,7 @@ definitions:
       deadline:
         type: string
         description: 推荐截止日期
-        format: date
+        format: date-time
       index:
         type: integer
         description: 推荐排序
@@ -1609,7 +1674,7 @@ definitions:
       time:
         type: string
         description: 评论时间
-        format: date
+        format: date-time
       imageUrlList:
         type: array
         description: 评论图片

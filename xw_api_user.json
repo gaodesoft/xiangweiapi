@@ -10,7 +10,7 @@
         },
         "description": "## 接口通信约定\n\n### 请求格式\n请求格式如下\n\n```\nhttps://api.xiangwei.com/xxx/xxx?jsonstring={key:value, ...}\n```\n### 响应格式\n返回数据格式均为json数据格式, 格式如下：\n```\n{\n    \"code\":0,\n    \"message\":\"...\",\n    \"data\": {\n        ...\n    },\n    \"pagination\": {\n        \"totalCount\": 100,\n        \"totalPages\": 10,\n        \"pageNumber\": 1,\n        \"pageSize\": 10\n    }\n}\n```\n#### code\n200-表示请求成功；\n其他-表示请求失败。\n#### message\n错误消息\n#### data\ndata可能是字符串、字典、数组等等。根据请求不同而有所差异。\n#### pagination\n分页信息，只对分页请求有效。\n"
     },
-    "host": "192.168.1.162:10010",
+    "host": "192.168.1.125:10010",
     "basePath": "/m/v1",
     "schemes": [
         "http",

@@ -720,6 +720,24 @@ paths:
                 preBookTime: "一天"
                 nonChange: true
                 nonRefundable: true
+                shop:
+                  id: "10"
+                  name: "xxxx"
+                  desc: ""
+                  type: 1
+                  typeVerification: 1
+                  status: 1
+                  serviceTime: "8:00-20:00"
+                  addr:
+                    province: "辽宁"
+                    city: "大连"
+                    area: "高新区"
+                    town: "敬贤街"
+                    village: "彩虹小镇"
+                  score: 4.9
+                  tel: "041188888888"
+                  mobile: "18888888888"
+                  avatarUrl: "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3047710011,1274531363&fm=116&gp=0.jpg"
 
   /tourismProduct/waitCommentList:
     x-swagger-router-controller: DefaultController
@@ -929,6 +947,8 @@ definitions:
         description: true:不可退 false:可退
       recomment:
           $ref: '#/definitions/TourismProductRecomment'
+      shop:
+        $ref: '#/definitions/Shop'
 
   ShopCertification:
     type: object
